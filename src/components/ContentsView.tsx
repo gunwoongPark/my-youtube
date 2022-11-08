@@ -22,10 +22,8 @@ const ContentsView = () => {
       const res = await api.fetchPopularVideoList({
         part: "snippet",
         chart: "mostPopular",
-        maxResults: 21,
+        maxResults: 40,
       });
-
-      console.log(res);
 
       setVideoList(res.items);
     } catch (error) {
@@ -45,7 +43,7 @@ const ContentsView = () => {
           />
         ))
       ) : (
-        <div></div>
+        <div>NONE DATA</div>
       )}
     </Pub.Container>
   );
@@ -54,5 +52,9 @@ const ContentsView = () => {
 export default ContentsView;
 
 const Pub = {
-  Container: styled.div``,
+  Container: styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  `,
 };
