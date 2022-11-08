@@ -1,11 +1,8 @@
-import { useEffect } from "react";
 import styled, { css } from "styled-components";
+import dateFormat from "../ex/date";
 
 const VideoItemView = (props: { video: any }) => {
   const { video } = props;
-  useEffect(() => {
-    console.log(props.video);
-  }, [props.video]);
 
   return (
     <Pub.Container
@@ -17,6 +14,7 @@ const VideoItemView = (props: { video: any }) => {
         alt={`video-${video.id}`}
       />
       <p>{video.snippet.title}</p>
+      <p>published at {dateFormat.d1(video.snippet.publishedAt)}</p>
     </Pub.Container>
   );
 };
