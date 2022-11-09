@@ -1,9 +1,16 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import styled from "styled-components";
+import { DeviceContext } from "../App";
 import { api } from "../lib/api/api";
 import VideoItemView from "../views/VideoItemView";
 
 const ContentsView = () => {
+  const deviceType = useContext(DeviceContext);
+
+  useEffect(() => {
+    console.log(deviceType);
+  }, [deviceType]);
+
   const [isInitLoading, setIsInitLoading] = useState<boolean>(false);
   const [videoList, setVideoList] = useState<any[]>([]);
 
