@@ -1,10 +1,17 @@
+import { useEffect } from "react";
 import styled, { ThemeProvider } from "styled-components";
 import ContentsView from "./components/ContentsView";
 import InputView from "./components/InputView";
+import useMediaQuery from "./hooks/useMediaQuery";
 import theme from "./theme/theme";
+import { DeviceType } from "./types/device";
 
 function App() {
-  console.log(window.matchMedia("screen and (max-width: 375px)"));
+  const deviceType: DeviceType | null = useMediaQuery();
+
+  useEffect(() => {
+    console.log(deviceType);
+  }, [deviceType]);
 
   return (
     <ThemeProvider theme={theme}>
