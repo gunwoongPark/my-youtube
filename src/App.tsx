@@ -1,15 +1,20 @@
-import styled from "styled-components";
+import styled, { ThemeProvider } from "styled-components";
 import ContentsView from "./components/ContentsView";
 import InputView from "./components/InputView";
+import theme from "./theme/theme";
 
 function App() {
-  return (
-    <Pub.Container>
-      <p>MY YOUTUBE</p>
+  console.log(window.matchMedia("screen and (max-width: 375px)"));
 
-      <InputView />
-      <ContentsView />
-    </Pub.Container>
+  return (
+    <ThemeProvider theme={theme}>
+      <Pub.Container>
+        <p>MY YOUTUBE</p>
+
+        <InputView />
+        <ContentsView />
+      </Pub.Container>
+    </ThemeProvider>
   );
 }
 
