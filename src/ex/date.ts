@@ -11,32 +11,39 @@ const dateFormat = {
 
       // year
       if (durationYear === 1) {
-        return "a year ago";
-      } else {
-        return `${durationYear} years ago`;
+        return "1 year ago";
       }
+      return `${durationYear} years ago`;
     }
 
     // month
     if (durationObject.asMonths() > 1) {
       const durationMonth = Math.round(durationObject.asMonths());
 
-      if (durationMonth === 1) {
-        return "a month ago";
-      } else {
-        return `${durationMonth} months ago`;
+      if (durationMonth === 12) {
+        return "11 months ago";
       }
+
+      if (durationMonth === 1) {
+        return "1 month ago";
+      }
+
+      return `${durationMonth} months ago`;
     }
 
     // day
     if (durationObject.asDays() > 1) {
       const durationDate = Math.round(durationObject.asDays());
 
-      if (durationDate === 1) {
-        return "a day ago";
-      } else {
-        return `${durationDate} days ago`;
+      if (durationDate === 30) {
+        return "29 days ago";
       }
+
+      if (durationDate === 1) {
+        return "1 day ago";
+      }
+
+      return `${durationDate} days ago`;
     }
 
     // hour
@@ -48,13 +55,24 @@ const dateFormat = {
       }
 
       if (durationHours === 1) {
-        return "an hour ago";
+        return "1 hour ago";
       }
 
       return `${durationHours} hours ago`;
     }
 
     // minutes
+    const durationMinutes = Math.round(durationObject.asMinutes());
+
+    if (durationMinutes === 60) {
+      return "59 minutes ago";
+    }
+
+    if (durationMinutes === 1) {
+      return "1 minute ago";
+    }
+
+    return `${durationMinutes} minutes ago`;
   },
 };
 
