@@ -2,7 +2,7 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { DeviceContext } from "../App";
 import { api } from "../lib/api/api";
-import VideoItemView from "../views/VideoItemView";
+import VideoItemView from "./VideoItemView";
 
 const ContentsView = () => {
   // const deviceType = useContext(DeviceContext);
