@@ -1,26 +1,26 @@
-import { createContext } from "react";
-import styled, { ThemeProvider, useTheme } from "styled-components";
+import React, { createContext } from "react";
+import styled, { ThemeProvider } from "styled-components";
 import ContentsView from "./components/ContentsView";
+import HeaderView from "./components/HeaderView";
 import InputView from "./components/InputView";
 import useMediaQuery from "./hooks/useMediaQuery";
+import useThemeState from "./hooks/useThemeState";
 import theme from "./theme/theme";
 import { DeviceType } from "./types/device";
-// import { ThemeType } from "./types/theme";
 
 export const DeviceContext = createContext<DeviceType | null>(null);
-// export const ThemeContext = createContext<ThemeType | null>(null);
 
 function App() {
   const deviceType = useMediaQuery();
-  const themeType = useTheme();
+  const { theme: themeState } = useThemeState();
 
   return (
     <ThemeProvider
-      theme={themeType === "DARK" ? theme.darkMode : theme.lightMode}
+      theme={themeState === "DARK" ? theme.darkMode : theme.lightMode}
     >
       <DeviceContext.Provider value={deviceType}>
         <Pub.Container>
-          <p>MY YOUTUBE</p>
+          <HeaderView />
 
           <InputView />
           <ContentsView />

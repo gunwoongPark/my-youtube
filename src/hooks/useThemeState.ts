@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { ThemeType } from "../types/theme";
 
-const useTheme = () => {
-  const [themeType, setThemeType] = useState<ThemeType | null>(null);
+const useThemeState = () => {
+  const [theme, setTheme] = useState<ThemeType | null>(null);
 
   useEffect(() => {
     const theme: ThemeType | null = localStorage.getItem(
@@ -11,12 +11,12 @@ const useTheme = () => {
 
     if (theme) {
       if (theme === "DARK") {
-        setThemeType("DARK");
+        setTheme("DARK");
       } else {
-        setThemeType("LIGHT");
+        setTheme("LIGHT");
       }
     } else {
-      setThemeType(
+      setTheme(
         window.matchMedia("(prefers-color-scheme: dark)").matches
           ? "DARK"
           : "LIGHT"
@@ -24,7 +24,7 @@ const useTheme = () => {
     }
   }, []);
 
-  return themeType;
+  return { theme, setTheme };
 };
 
-export default useTheme;
+export default useThemeState;
