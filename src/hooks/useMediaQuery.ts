@@ -24,19 +24,13 @@ const useMediaQuery = () => {
 
   // function
   const onChangeMobile = useCallback((e: MediaQueryListEvent) => {
-    if (e.matches) {
-      setDeviceType("MOBILE");
-    }
+    if (e.matches) setDeviceType("MOBILE");
   }, []);
   const onChangeTablet = useCallback((e: MediaQueryListEvent) => {
-    if (e.matches) {
-      setDeviceType("TABLET");
-    }
+    if (e.matches) setDeviceType("TABLET");
   }, []);
   const onChangePc = useCallback((e: MediaQueryListEvent) => {
-    if (e.matches) {
-      setDeviceType("PC");
-    }
+    if (e.matches) setDeviceType("PC");
   }, []);
 
   // add event

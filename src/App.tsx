@@ -15,18 +15,18 @@ const App = observer(() => {
   const deviceType = useMediaQuery();
 
   return (
-    <DeviceContext.Provider value={deviceType}>
-      <ThemeProvider
-        theme={themeModel.theme === "DARK" ? theme.darkMode : theme.lightMode}
-      >
+    <ThemeProvider
+      theme={themeModel.theme === "DARK" ? theme.darkMode : theme.lightMode}
+    >
+      <DeviceContext.Provider value={deviceType}>
         <Pub.Container>
           <HeaderView />
 
           <InputView />
           <ContentsView />
         </Pub.Container>
-      </ThemeProvider>
-    </DeviceContext.Provider>
+      </DeviceContext.Provider>
+    </ThemeProvider>
   );
 });
 
