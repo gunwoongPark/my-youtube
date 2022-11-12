@@ -1,30 +1,14 @@
-import { useEffect, useState } from "react";
-import { ThemeType } from "../types/theme";
+import { useContext } from "react";
+import { ThemeContext } from "styled-components";
 
 const useThemeState = () => {
-  const [theme, setTheme] = useState<ThemeType | null>(null);
+  const themeValue = useContext(ThemeContext);
 
-  useEffect(() => {
-    const theme: ThemeType | null = localStorage.getItem(
-      "theme"
-    ) as ThemeType | null;
+  if (themeValue === undefined) {
+    throw new Error("useThemeState should be used within ThemeProvider");
+  }
 
-    if (theme) {
-      if (theme === "DARK") {
-        setTheme("DARK");
-      } else {
-        setTheme("LIGHT");
-      }
-    } else {
-      setTheme(
-        window.matchMedia("(prefers-color-scheme: dark)").matches
-          ? "DARK"
-          : "LIGHT"
-      );
-    }
-  }, []);
-
-  return { theme, setTheme };
+  return themeValue;
 };
 
 export default useThemeState;
