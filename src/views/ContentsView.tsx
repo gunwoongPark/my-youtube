@@ -1,11 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
+import useMediaQuery from "../hooks/useMediaQuery";
 import { api } from "../lib/api/api";
 import VideoItemView from "./VideoItemView";
 
 const ContentsView = () => {
   const [isInitLoading, setIsInitLoading] = useState<boolean>(false);
   const [videoList, setVideoList] = useState<any[]>([]);
+
+  const mediaType = useMediaQuery();
 
   useEffect(() => {
     fetchVideoList();

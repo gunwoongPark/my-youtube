@@ -2,9 +2,10 @@ import { useCallback, useEffect, useState } from "react";
 import { DeviceType } from "../types/device";
 
 const useMediaQuery = () => {
+  // state
   const [deviceType, setDeviceType] = useState<DeviceType | null>(null);
 
-  // init
+  // useEffect
   useEffect(() => {
     const innerWidth = window.innerWidth;
 
@@ -17,6 +18,7 @@ const useMediaQuery = () => {
     return () => window.removeEventListener("resize", onResizeWindow);
   }, []);
 
+  // function
   const onResizeWindow = useCallback((e: UIEvent) => {
     const target = e.target as Window;
 
