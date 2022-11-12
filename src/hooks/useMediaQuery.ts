@@ -11,40 +11,20 @@ const useMediaQuery = () => {
     if (376 > innerWidth) setDeviceType("MOBILE");
     else if (innerWidth > 376 && 1024 > innerWidth) setDeviceType("TABLET");
     else setDeviceType("PC");
+
+    window.addEventListener("resize", onResizeWindow);
+
+    return () => window.removeEventListener("resize", onResizeWindow);
   }, []);
 
-  // media queries
-  const mobileMediaQueryList = window.matchMedia(
-    "screen and (max-width: 375px)"
-  );
-  const tabletMediaQueryList = window.matchMedia(
-    "screen and (min-width: 376px) and (max-width: 768px)"
-  );
-  const pcMediaQueryList = window.matchMedia("screen and (min-width: 769px)");
+  const onResizeWindow = useCallback((e: UIEvent) => {
+    const target = e.target as Window;
 
-  // function
-  const onChangeMobile = useCallback((e: MediaQueryListEvent) => {
-    if (e.matches) setDeviceType("MOBILE");
+    if (target.innerWidth < 376) setDeviceType("MOBILE");
+    else if (target.innerWidth > 375 && 769 > target.innerWidth)
+      setDeviceType("TABLET");
+    else setDeviceType("PC");
   }, []);
-  const onChangeTablet = useCallback((e: MediaQueryListEvent) => {
-    if (e.matches) setDeviceType("TABLET");
-  }, []);
-  const onChangePc = useCallback((e: MediaQueryListEvent) => {
-    if (e.matches) setDeviceType("PC");
-  }, []);
-
-  // add event
-  useEffect(() => {
-    mobileMediaQueryList.addEventListener("change", onChangeMobile);
-    tabletMediaQueryList.addEventListener("change", onChangeTablet);
-    pcMediaQueryList.addEventListener("change", onChangePc);
-
-    return () => {
-      mobileMediaQueryList.removeEventListener("change", onChangeMobile);
-      tabletMediaQueryList.removeEventListener("change", onChangeTablet);
-      pcMediaQueryList.removeEventListener("change", onChangePc);
-    };
-  }, [mobileMediaQueryList, pcMediaQueryList, tabletMediaQueryList]);
 
   return deviceType;
 };
