@@ -5,8 +5,10 @@ const HeaderView = () => {
     <Pub.Container>
       <p>MY-YOUTUBE</p>
 
-      <label htmlFor="is-dark-mode-button">dark/light</label>
-      <input type="checkbox" id="is-dark-mode-button" />
+      <span>
+        <label htmlFor="is-dark-mode-button">dark/light</label>
+        <input type="checkbox" id="is-dark-mode-button" />
+      </span>
     </Pub.Container>
   );
 };
@@ -15,9 +17,14 @@ export default HeaderView;
 
 const Pub = {
   Container: styled.div`
-    display: flex;
+    width: 100%;
 
-    & input {
+    & p {
+      display: inline-block;
+    }
+
+    & span {
+      float: right;
     }
   `,
 };
