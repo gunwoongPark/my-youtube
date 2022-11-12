@@ -24,7 +24,8 @@ const Pub = {
     }
 
     & span {
-      float: right;
+      position: absolute;
+      right: 0;
     }
   `,
 };
