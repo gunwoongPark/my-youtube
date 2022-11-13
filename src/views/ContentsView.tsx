@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import useMediaQuery from "../hooks/useMediaQuery";
 import { api } from "../lib/api/api";
 import { DeviceType } from "../types/device";
 import VideoItemView from "./VideoItemView";
+import { FadeLoader } from "react-spinners";
 
 const ContentsView = () => {
   const [isInitLoading, setIsInitLoading] = useState<boolean>(false);
@@ -47,7 +48,7 @@ const ContentsView = () => {
           />
         ))
       ) : (
-        <div>NONE DATA</div>
+        <div>NONE VIDEO</div>
       )}
     </Pub.Container>
   );
@@ -59,7 +60,6 @@ const Pub = {
   Container: styled.div<{ deviceType: DeviceType }>`
     display: flex;
     flex-wrap: wrap;
-    /* justify-content: space-between; */
 
     justify-content: ${({ deviceType }) => {
       if (deviceType === "PC") {
