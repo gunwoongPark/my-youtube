@@ -56,8 +56,12 @@ const ContentsView = () => {
 
 export default ContentsView;
 
+interface ContentsViewStylePropsType {
+  deviceType: DeviceType;
+}
+
 const Pub = {
-  Container: styled.div<{ deviceType: DeviceType }>`
+  Container: styled.div<ContentsViewStylePropsType>`
     display: flex;
     flex-wrap: wrap;
 

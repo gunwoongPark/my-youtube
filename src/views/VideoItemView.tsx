@@ -1,5 +1,5 @@
 import styled, { css } from "styled-components";
-import dateFormat from "../ex/date";
+import dateFormat from "../util/date";
 
 const VideoItemView = (props: { video: any }) => {
   const { video } = props;
@@ -21,13 +21,13 @@ const VideoItemView = (props: { video: any }) => {
 
 export default VideoItemView;
 
-type VideoContainerType = {
+interface VideoItemViewStylePropsType {
   width: number;
   height: number;
-};
+}
 
 const Pub = {
-  Container: styled.div<VideoContainerType>`
+  Container: styled.div<VideoItemViewStylePropsType>`
     display: inline-block;
     width: ${({ width }) =>
       css`
