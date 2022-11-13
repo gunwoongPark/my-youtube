@@ -1,14 +1,15 @@
 import { useCallback, useEffect, useState } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import useMediaQuery from "../hooks/useMediaQuery";
 import { api } from "../lib/api/api";
+import { DeviceType } from "../types/device";
 import VideoItemView from "./VideoItemView";
 
 const ContentsView = () => {
   const [isInitLoading, setIsInitLoading] = useState<boolean>(false);
   const [videoList, setVideoList] = useState<any[]>([]);
 
-  const mediaType = useMediaQuery();
+  const deviceType = useMediaQuery();
 
   useEffect(() => {
     fetchVideoList();
@@ -37,7 +38,7 @@ const ContentsView = () => {
   }, [isInitLoading]);
 
   return (
-    <Pub.Container>
+    <Pub.Container deviceType={deviceType as DeviceType}>
       {!!videoList.length ? (
         videoList.map((video, index) => (
           <VideoItemView
@@ -55,9 +56,19 @@ const ContentsView = () => {
 export default ContentsView;
 
 const Pub = {
-  Container: styled.div`
+  Container: styled.div<{ deviceType: DeviceType }>`
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    /* justify-content: space-between; */
+
+    justify-content: ${({ deviceType }) => {
+      if (deviceType === "PC") {
+        return "space-between";
+      } else if (deviceType === "TABLET") {
+        return "space-around";
+      } else {
+        return "center";
+      }
+    }};
   `,
 };

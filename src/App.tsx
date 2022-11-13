@@ -27,6 +27,7 @@ const Pub = {
   Container: styled.div`
     text-align: center;
 
+    /* theme */
     background: ${(props) => props.theme.background};
     color: ${(props) => props.theme.color};
   `,
