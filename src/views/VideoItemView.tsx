@@ -2,19 +2,17 @@ import styled, { css } from "styled-components";
 import dateFormat from "../util/date";
 
 const VideoItemView = (props: { video: any }) => {
-  const { video } = props;
-
   return (
     <Pub.Container
-      width={video.snippet.thumbnails.medium.width}
-      height={video.snippet.thumbnails.medium.height}
+      width={props.video.snippet.thumbnails.medium.width}
+      height={props.video.snippet.thumbnails.medium.height}
     >
       <img
         src={props.video.snippet.thumbnails.medium.url}
-        alt={`video-${video.id}`}
+        alt={`video-${props.video.id}`}
       />
-      <p>{video.snippet.title}</p>
-      <p>published at {dateFormat.d1(video.snippet.publishedAt)}</p>
+      <p>{props.video.snippet.title}</p>
+      <p>published at {dateFormat.d1(props.video.snippet.publishedAt)}</p>
     </Pub.Container>
   );
 };
