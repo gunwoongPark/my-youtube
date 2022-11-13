@@ -5,6 +5,7 @@ import { api } from "../lib/api/api";
 import { DeviceType } from "../types/type";
 import VideoItemView from "./VideoItemView";
 import { FadeLoader } from "react-spinners";
+import FullPageLoadingView from "../components/FullPageLoadingView";
 
 const ContentsView = () => {
   const [isInitLoading, setIsInitLoading] = useState<boolean>(false);
@@ -40,7 +41,9 @@ const ContentsView = () => {
 
   return (
     <Pub.Container deviceType={deviceType as DeviceType}>
-      {!!videoList.length ? (
+      {!isInitLoading ? (
+        <FullPageLoadingView />
+      ) : !!videoList.length ? (
         videoList.map((video, index) => (
           <VideoItemView
             key={`video-list-item-${index}-${video.id}`}
