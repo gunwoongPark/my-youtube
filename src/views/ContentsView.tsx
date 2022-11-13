@@ -4,7 +4,6 @@ import useMediaQuery from "../hooks/useMediaQuery";
 import { api } from "../lib/api/api";
 import { DeviceType } from "../types/type";
 import VideoItemView from "./VideoItemView";
-import { FadeLoader } from "react-spinners";
 import FullPageLoadingView from "../components/FullPageLoadingView";
 
 const ContentsView = () => {
@@ -41,7 +40,7 @@ const ContentsView = () => {
 
   return (
     <Pub.Container deviceType={deviceType as DeviceType}>
-      {!isInitLoading ? (
+      {isInitLoading ? (
         <FullPageLoadingView />
       ) : !!videoList.length ? (
         videoList.map((video, index) => (
@@ -68,10 +67,10 @@ const Pub = {
     display: flex;
     flex-wrap: wrap;
 
-    justify-content: ${({ deviceType }) => {
-      if (deviceType === "PC") {
+    justify-content: ${(props) => {
+      if (props.deviceType === "PC") {
         return "space-between";
-      } else if (deviceType === "TABLET") {
+      } else if (props.deviceType === "TABLET") {
         return "space-around";
       } else {
         return "center";

@@ -1,10 +1,11 @@
 import { FadeLoader } from "react-spinners";
 import styled from "styled-components";
+import { themeModel } from "../model/themeModel";
 
 const FullPageLoadingView = () => {
   return (
     <Pub.Container>
-      <FadeLoader color="#ffffff" />
+      <FadeLoader color={themeModel.theme === "DARK" ? "#ffffff" : "#000000"} />
     </Pub.Container>
   );
 };
@@ -16,7 +17,7 @@ const Pub = {
     position: fixed;
     width: 100%;
     height: 100%;
-    background: #000;
+    background: ${(props) => props.theme.background};
     display: flex;
     justify-content: center;
     align-items: center;
