@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import useMediaQuery from "../hooks/useMediaQuery";
 import { api } from "../lib/api/api";
-import { DeviceType } from "../types/device";
+import { DeviceType } from "../types/type";
 import VideoItemView from "./VideoItemView";
 import { FadeLoader } from "react-spinners";
 

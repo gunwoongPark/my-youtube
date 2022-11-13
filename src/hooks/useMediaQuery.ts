@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { DeviceType } from "../types/device";
+import { DeviceType } from "../types/type";
 
 const useMediaQuery = () => {
   // state

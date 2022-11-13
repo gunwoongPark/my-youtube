@@ -1,6 +1,6 @@
 import { makeAutoObservable } from "mobx";
 import { ChangeEvent } from "react";
-import { ThemeType } from "../types/theme";
+import { ThemeType } from "../types/type";
 
 class ThemeModel {
   theme: ThemeType;
