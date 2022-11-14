@@ -9,7 +9,6 @@ import FullPageLoadingView from "../components/FullPageLoadingView";
 const ContentsView = () => {
   // useRef
   const target = useRef<HTMLDivElement>(null);
-  const isMount = useRef(false);
 
   // deviceType
   const deviceType = useMediaQuery();
@@ -18,25 +17,15 @@ const ContentsView = () => {
   const [isInitLoading, setIsInitLoading] = useState<boolean>(false);
   const [isFetchLoading, setIsFetchLoading] = useState<boolean>(false);
   const [videoList, setVideoList] = useState<any[]>([]);
-  const [nextPageToken, setNextPageToken] = useState<string | null>(null);
+  const [nextPageToken, setNextPageToken] = useState<string>("");
 
   // useEffect
   useEffect(() => {
-    if (isMount.current) {
-      return;
-    }
-
-    isMount.current = true;
-
-    fetchVideoList();
-  }, [isMount]);
-
-  // useEffect(() => {
-  //   fetchVideoList();
-  // }, []);
+    initVideoList();
+  }, []);
 
   // function
-  const fetchVideoList = useCallback(async () => {
+  const initVideoList = useCallback(async () => {
     try {
       if (isInitLoading) {
         return;
@@ -50,7 +39,6 @@ const ContentsView = () => {
         maxResults: 24,
       });
 
-      console.log(res);
       setNextPageToken(res.nextPageToken);
       setVideoList(res.items);
     } catch (error) {
@@ -59,6 +47,30 @@ const ContentsView = () => {
       setIsInitLoading(false);
     }
   }, [isInitLoading]);
+
+  const fetchVideoList = useCallback(async () => {
+    try {
+      if (isFetchLoading) {
+        return;
+      }
+
+      setIsFetchLoading(true);
+
+      const res = await api.fetchPopularVideoList({
+        part: "snippet",
+        chart: "mostPopular",
+        maxResults: 24,
+        pageToken: nextPageToken,
+      });
+
+      setNextPageToken(res.nextPageToken);
+      setVideoList((prevVideoList) => [...prevVideoList, ...res.items]);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsFetchLoading(false);
+    }
+  }, [isFetchLoading, nextPageToken]);
 
   // TSX
   return (
