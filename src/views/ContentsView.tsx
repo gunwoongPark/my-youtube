@@ -7,6 +7,7 @@ import VideoItemView from "./VideoItemView";
 import FullPageLoadingView from "../components/FullPageLoadingView";
 import { isNil } from "lodash";
 import useIntersectionObserver from "../hooks/useIntersectionObserver";
+import SpinnerView from "../components/SpinnerView";
 
 const ContentsView = () => {
   // useRef
@@ -97,23 +98,26 @@ const ContentsView = () => {
 
   // TSX
   return (
-    <Pub.Container deviceType={deviceType as DeviceType}>
-      {isInitLoading ? (
-        <FullPageLoadingView />
-      ) : !!videoList.length ? (
-        videoList.map((video, index) => (
-          <VideoItemView
-            key={`video-list-item-${index}-${video.id}`}
-            video={video}
-          />
-        ))
-      ) : (
-        <div>NONE VIDEO</div>
-      )}
+    <>
+      <Pub.Container deviceType={deviceType as DeviceType}>
+        {isInitLoading ? (
+          <FullPageLoadingView />
+        ) : !!videoList.length ? (
+          videoList.map((video, index) => (
+            <VideoItemView
+              key={`video-list-item-${index}-${video.id}`}
+              video={video}
+            />
+          ))
+        ) : (
+          <div>NONE VIDEO</div>
+        )}
+      </Pub.Container>
 
       {/* target element */}
       <div ref={targetRef} />
-    </Pub.Container>
+      {isFetchLoading && <SpinnerView />}
+    </>
   );
 };
 
