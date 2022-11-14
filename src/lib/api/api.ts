@@ -12,7 +12,7 @@ export class Api extends ApiBase {
     apiBase.get(
       `/videos?part=${part}&chart=${chart}&maxResults=${maxResults}&key=${
         process.env.REACT_APP_YOUTUBE_API_KEY
-      }${isString(pageToken) ? `pageToken=${pageToken}` : ""}`
+      }${isString(pageToken) ? `&pageToken=${pageToken}` : ""}`
     );
 }
 

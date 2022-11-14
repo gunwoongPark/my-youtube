@@ -5,10 +5,12 @@ import { api } from "../lib/api/api";
 import { DeviceType } from "../types/type";
 import VideoItemView from "./VideoItemView";
 import FullPageLoadingView from "../components/FullPageLoadingView";
+import { isNil } from "lodash";
+import useIntersectionObserver from "../hooks/useIntersectionObserver";
 
 const ContentsView = () => {
   // useRef
-  const target = useRef<HTMLDivElement>(null);
+  const targetRef = useRef<HTMLDivElement>(null);
 
   // deviceType
   const deviceType = useMediaQuery();
@@ -17,14 +19,30 @@ const ContentsView = () => {
   const [isInitLoading, setIsInitLoading] = useState<boolean>(false);
   const [isFetchLoading, setIsFetchLoading] = useState<boolean>(false);
   const [videoList, setVideoList] = useState<any[]>([]);
-  const [nextPageToken, setNextPageToken] = useState<string>("");
+  const [nextPageToken, setNextPageToken] = useState<string | null>(null);
 
   // useEffect
   useEffect(() => {
     initVideoList();
   }, []);
 
+  // infinite scroll setting
+  const handleObserver = useCallback(
+    (entries: IntersectionObserverEntry[]) => {
+      if (isInitLoading || isFetchLoading) {
+        return;
+      }
+
+      if (entries[0].isIntersecting) {
+        fetchVideoList();
+      }
+    },
+    [isInitLoading, isFetchLoading]
+  );
+  useIntersectionObserver({ callback: handleObserver, ref: targetRef });
+
   // function
+  // init fetching
   const initVideoList = useCallback(async () => {
     try {
       if (isInitLoading) {
@@ -48,8 +66,13 @@ const ContentsView = () => {
     }
   }, [isInitLoading]);
 
+  // infinite scroll fetching
   const fetchVideoList = useCallback(async () => {
     try {
+      if (isNil(nextPageToken)) {
+        return;
+      }
+
       if (isFetchLoading) {
         return;
       }
@@ -89,7 +112,7 @@ const ContentsView = () => {
       )}
 
       {/* target element */}
-      <div ref={target} />
+      <div ref={targetRef} />
     </Pub.Container>
   );
 };
