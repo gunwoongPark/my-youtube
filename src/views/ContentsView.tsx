@@ -7,17 +7,35 @@ import VideoItemView from "./VideoItemView";
 import FullPageLoadingView from "../components/FullPageLoadingView";
 
 const ContentsView = () => {
+  // useRef
   const target = useRef<HTMLDivElement>(null);
+  const isMount = useRef(false);
 
-  const [isInitLoading, setIsInitLoading] = useState<boolean>(false);
-  const [videoList, setVideoList] = useState<any[]>([]);
-
+  // deviceType
   const deviceType = useMediaQuery();
 
-  useEffect(() => {
-    fetchVideoList();
-  }, []);
+  // useState
+  const [isInitLoading, setIsInitLoading] = useState<boolean>(false);
+  const [isFetchLoading, setIsFetchLoading] = useState<boolean>(false);
+  const [videoList, setVideoList] = useState<any[]>([]);
+  const [nextPageToken, setNextPageToken] = useState<string | null>(null);
 
+  // useEffect
+  useEffect(() => {
+    if (isMount.current) {
+      return;
+    }
+
+    isMount.current = true;
+
+    fetchVideoList();
+  }, [isMount]);
+
+  // useEffect(() => {
+  //   fetchVideoList();
+  // }, []);
+
+  // function
   const fetchVideoList = useCallback(async () => {
     try {
       if (isInitLoading) {
@@ -32,6 +50,8 @@ const ContentsView = () => {
         maxResults: 24,
       });
 
+      console.log(res);
+      setNextPageToken(res.nextPageToken);
       setVideoList(res.items);
     } catch (error) {
       console.error(error);
@@ -40,6 +60,7 @@ const ContentsView = () => {
     }
   }, [isInitLoading]);
 
+  // TSX
   return (
     <Pub.Container deviceType={deviceType as DeviceType}>
       {isInitLoading ? (
