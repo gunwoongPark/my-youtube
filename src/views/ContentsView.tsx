@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import useMediaQuery from "../hooks/useMediaQuery";
 import { api } from "../lib/api/api";
@@ -7,6 +7,8 @@ import VideoItemView from "./VideoItemView";
 import FullPageLoadingView from "../components/FullPageLoadingView";
 
 const ContentsView = () => {
+  const target = useRef<HTMLDivElement>(null);
+
   const [isInitLoading, setIsInitLoading] = useState<boolean>(false);
   const [videoList, setVideoList] = useState<any[]>([]);
 
@@ -30,8 +32,6 @@ const ContentsView = () => {
         maxResults: 24,
       });
 
-      console.log(res);
-
       setVideoList(res.items);
     } catch (error) {
       console.error(error);
@@ -54,6 +54,9 @@ const ContentsView = () => {
       ) : (
         <div>NONE VIDEO</div>
       )}
+
+      {/* target element */}
+      <div ref={target} />
     </Pub.Container>
   );
 };
