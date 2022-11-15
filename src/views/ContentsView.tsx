@@ -21,6 +21,7 @@ const ContentsView = () => {
   const [isFetchLoading, setIsFetchLoading] = useState<boolean>(false);
   const [videoList, setVideoList] = useState<any[]>([]);
   const [nextPageToken, setNextPageToken] = useState<string | null>(null);
+  const [totalVideoNumber, setTotalVideoNumber] = useState<number | null>(null);
 
   // useEffect
   useEffect(() => {
@@ -31,6 +32,10 @@ const ContentsView = () => {
   const handleObserver = useCallback(
     (entries: IntersectionObserverEntry[]) => {
       if (isInitLoading || isFetchLoading) {
+        return;
+      }
+
+      if (videoList.length === totalVideoNumber) {
         return;
       }
 
@@ -58,6 +63,7 @@ const ContentsView = () => {
         maxResults: 24,
       });
 
+      setTotalVideoNumber(res.pageInfo.totalResults);
       setNextPageToken(res.nextPageToken);
       setVideoList(res.items);
     } catch (error) {
@@ -86,6 +92,8 @@ const ContentsView = () => {
         maxResults: 24,
         pageToken: nextPageToken,
       });
+
+      console.log(res);
 
       setNextPageToken(res.nextPageToken);
       setVideoList((prevVideoList) => [...prevVideoList, ...res.items]);
