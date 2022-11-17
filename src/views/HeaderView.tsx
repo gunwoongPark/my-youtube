@@ -33,7 +33,7 @@ const Pub = {
 
     & span {
       position: absolute;
-      right: 0;
+      right: 25px;
     }
   `,
 };

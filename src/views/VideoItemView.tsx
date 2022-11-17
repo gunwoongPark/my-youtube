@@ -2,6 +2,7 @@ import styled, { css } from "styled-components";
 import dateFormat from "../util/date";
 
 const VideoItemView = (props: { video: any }) => {
+  console.log(props.video);
   return (
     <Pub.Container
       width={props.video.snippet.thumbnails.medium.width}

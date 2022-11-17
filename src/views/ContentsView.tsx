@@ -1,8 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import useMediaQuery from "../hooks/useMediaQuery";
 import { api } from "../lib/api/api";
-import { DeviceType } from "../types/type";
 import VideoItemView from "./VideoItemView";
 import FullPageLoadingView from "../components/FullPageLoadingView";
 import { isNil } from "lodash";
@@ -12,11 +10,7 @@ import SpinnerView from "../components/SpinnerView";
 const ContentsView = () => {
   // useRef
   const targetRef = useRef<HTMLDivElement>(null);
-
   const isInit = useRef(false);
-
-  // deviceType
-  const deviceType = useMediaQuery();
 
   // useState
   const [isFetchLoading, setIsFetchLoading] = useState<boolean>(false);
@@ -76,18 +70,19 @@ const ContentsView = () => {
 
       setTotalVideoNumber(res.pageInfo.totalResults);
       setNextPageToken(res.nextPageToken);
+
+      isInit.current = true;
     } catch (error) {
       console.error(error);
     } finally {
       setIsFetchLoading(false);
-      isInit.current = true;
     }
   }, [isFetchLoading, nextPageToken]);
 
   // TSX
   return (
     <>
-      <Pub.Container deviceType={deviceType as DeviceType}>
+      <Pub.Container>
         {!isInit.current && isFetchLoading ? (
           <FullPageLoadingView />
         ) : !!videoList.length ? (
@@ -111,23 +106,21 @@ const ContentsView = () => {
 
 export default ContentsView;
 
-interface ContentsViewStylePropsType {
-  deviceType: DeviceType;
-}
-
 const Pub = {
-  Container: styled.div<ContentsViewStylePropsType>`
-    display: flex;
-    flex-wrap: wrap;
+  Container: styled.div`
+    display: grid;
+    justify-items: center;
 
-    justify-content: ${(props) => {
-      if (props.deviceType === "PC") {
-        return "space-between";
-      } else if (props.deviceType === "TABLET") {
-        return "space-around";
-      } else {
-        return "center";
-      }
-    }};
+    @media screen and (min-width: 1280px) {
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+
+    @media screen and (max-width: 1279px) and (min-width: 960px) {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    @media screen and (max-width: 959px) and (min-width: 640px) {
+      grid-template-columns: 1fr 1fr;
+    }
   `,
 };
