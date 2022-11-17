@@ -13,25 +13,27 @@ const ContentsView = () => {
   // useRef
   const targetRef = useRef<HTMLDivElement>(null);
 
+  const isInit = useRef(false);
+
   // deviceType
   const deviceType = useMediaQuery();
 
   // useState
-  const [isInitLoading, setIsInitLoading] = useState<boolean>(false);
   const [isFetchLoading, setIsFetchLoading] = useState<boolean>(false);
   const [videoList, setVideoList] = useState<any[]>([]);
   const [nextPageToken, setNextPageToken] = useState<string | null>(null);
   const [totalVideoNumber, setTotalVideoNumber] = useState<number | null>(null);
 
   // useEffect
+  // init video list
   useEffect(() => {
-    initVideoList();
+    fetchVideoList();
   }, []);
 
   // infinite scroll setting
   const handleObserver = useCallback(
     (entries: IntersectionObserverEntry[]) => {
-      if (isInitLoading || isFetchLoading) {
+      if (isFetchLoading) {
         return;
       }
 
@@ -43,43 +45,13 @@ const ContentsView = () => {
         fetchVideoList();
       }
     },
-    [isInitLoading, isFetchLoading]
+    [isFetchLoading, totalVideoNumber, videoList.length]
   );
   useIntersectionObserver({ callback: handleObserver, ref: targetRef });
 
   // function
-  // init fetching
-  const initVideoList = useCallback(async () => {
-    try {
-      if (isInitLoading) {
-        return;
-      }
-
-      setIsInitLoading(true);
-
-      const res = await api.fetchPopularVideoList({
-        part: "snippet",
-        chart: "mostPopular",
-        maxResults: 24,
-      });
-
-      setTotalVideoNumber(res.pageInfo.totalResults);
-      setNextPageToken(res.nextPageToken);
-      setVideoList(res.items);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsInitLoading(false);
-    }
-  }, [isInitLoading]);
-
-  // infinite scroll fetching
   const fetchVideoList = useCallback(async () => {
     try {
-      if (isNil(nextPageToken)) {
-        return;
-      }
-
       if (isFetchLoading) {
         return;
       }
@@ -90,17 +62,25 @@ const ContentsView = () => {
         part: "snippet",
         chart: "mostPopular",
         maxResults: 24,
-        pageToken: nextPageToken,
+        pageToken: isNil(nextPageToken) ? undefined : nextPageToken,
       });
 
-      console.log(res);
+      // init fetch
+      if (isNil(nextPageToken)) {
+        setVideoList(res.items);
+      }
+      // infinite scroll fetch
+      else {
+        setVideoList((prevVideoList) => [...prevVideoList, ...res.items]);
+      }
 
+      setTotalVideoNumber(res.pageInfo.totalResults);
       setNextPageToken(res.nextPageToken);
-      setVideoList((prevVideoList) => [...prevVideoList, ...res.items]);
     } catch (error) {
       console.error(error);
     } finally {
       setIsFetchLoading(false);
+      isInit.current = true;
     }
   }, [isFetchLoading, nextPageToken]);
 
@@ -108,7 +88,7 @@ const ContentsView = () => {
   return (
     <>
       <Pub.Container deviceType={deviceType as DeviceType}>
-        {isInitLoading ? (
+        {!isInit.current && isFetchLoading ? (
           <FullPageLoadingView />
         ) : !!videoList.length ? (
           videoList.map((video, index) => (
@@ -124,7 +104,7 @@ const ContentsView = () => {
 
       {/* target element */}
       <div ref={targetRef} />
-      {isFetchLoading && <SpinnerView />}
+      {isInit.current && isFetchLoading && <SpinnerView />}
     </>
   );
 };
