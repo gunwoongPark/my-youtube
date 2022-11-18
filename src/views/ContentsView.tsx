@@ -52,10 +52,14 @@ const ContentsView = observer(() => {
       }
 
       if (entries[0].isIntersecting) {
-        fetchPopularVideoList();
+        if (!!searchModel.keyword.length) {
+          fetchSearchVideoList();
+        } else {
+          fetchPopularVideoList();
+        }
       }
     },
-    [isFetchLoading, totalVideoNumber, videoList.length]
+    [isFetchLoading, totalVideoNumber, videoList.length, searchModel.keyword]
   );
   useIntersectionObserver({ callback: handleObserver, ref: targetRef });
 
@@ -102,6 +106,10 @@ const ContentsView = observer(() => {
       }
 
       setIsFetchLoading(true);
+
+      if (!isInit.current) {
+        setVideoList([]);
+      }
 
       const res = await api.fetchSearchVideoList({
         part: "snippet",
