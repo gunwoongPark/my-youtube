@@ -24,6 +24,7 @@ const ContentsView = observer(() => {
   const [videoList, setVideoList] = useState<any[]>([]);
   const [nextPageToken, setNextPageToken] = useState<string | null>(null);
   const [totalVideoNumber, setTotalVideoNumber] = useState<number | null>(null);
+  const [isExceeding, setIsExceeding] = useState<boolean>(false);
 
   // useEffect
   // init video list
@@ -84,8 +85,15 @@ const ContentsView = observer(() => {
       });
 
       if (axios.isAxiosError(res)) {
-        navigate("/error");
+        if (res.response?.status === 404 || res.response?.status === 500) {
+          navigate("/error");
+        } else if (res.response?.status === 403) {
+          setIsExceeding(true);
+          return;
+        }
       }
+
+      setIsExceeding(false);
 
       if (isNil(nextPageToken)) {
         // init fetch
@@ -103,10 +111,9 @@ const ContentsView = observer(() => {
     } finally {
       setIsFetchLoading(false);
     }
-  }, [isFetchLoading, nextPageToken]);
+  }, [isFetchLoading, nextPageToken, navigate]);
 
   const fetchSearchVideoList = useCallback(async () => {
-    console.log(nextPageToken);
     try {
       if (isFetchLoading) {
         return;
@@ -126,8 +133,15 @@ const ContentsView = observer(() => {
       });
 
       if (axios.isAxiosError(res)) {
-        navigate("/error");
+        if (res.response?.status === 404 || res.response?.status === 500) {
+          navigate("/error");
+        } else if (res.response?.status === 403) {
+          setIsExceeding(true);
+          return;
+        }
       }
+
+      setIsExceeding(false);
 
       // init fetch
       if (isNil(nextPageToken)) {
@@ -145,13 +159,28 @@ const ContentsView = observer(() => {
     } finally {
       setIsFetchLoading(false);
     }
-  }, [isFetchLoading, nextPageToken]);
+  }, [isFetchLoading, nextPageToken, navigate]);
 
   // TSX
   return (
     <>
       <Pub.Container>
-        {!isInit.current && isFetchLoading ? (
+        {(() => {
+          if (!isInit.current && isFetchLoading) {
+            return <FullPageLoadingView />;
+          } else {
+            if (!!videoList.length) {
+              return videoList.map((video, index) => (
+                <VideoItemView
+                  key={`video-list-item-${index}-${video.id}`}
+                  video={video}
+                />
+              ));
+            }
+            return <div>NONE VIDEO</div>;
+          }
+        })()}
+        {/* {!isInit.current && isFetchLoading ? (
           <FullPageLoadingView />
         ) : !!videoList.length ? (
           videoList.map((video, index) => (
@@ -162,7 +191,7 @@ const ContentsView = observer(() => {
           ))
         ) : (
           <div>NONE VIDEO</div>
-        )}
+        )} */}
       </Pub.Container>
 
       {/* target element */}
