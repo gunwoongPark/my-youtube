@@ -8,8 +8,13 @@ import useIntersectionObserver from "../hooks/useIntersectionObserver";
 import SpinnerView from "../components/SpinnerView";
 import { searchModel } from "../model/searchModel";
 import { observer } from "mobx-react-lite";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const ContentsView = observer(() => {
+  // navigate
+  const navigate = useNavigate();
+
   // useRef
   const targetRef = useRef<HTMLDivElement>(null);
   const isInit = useRef(false);
@@ -78,8 +83,12 @@ const ContentsView = observer(() => {
         pageToken: isNil(nextPageToken) ? undefined : nextPageToken,
       });
 
-      // init fetch
+      if (axios.isAxiosError(res)) {
+        navigate("/error");
+      }
+
       if (isNil(nextPageToken)) {
+        // init fetch
         setVideoList(res.items);
       }
       // infinite scroll fetch
@@ -115,7 +124,10 @@ const ContentsView = observer(() => {
         q: searchModel.keyword,
         pageToken: isNil(nextPageToken) ? undefined : nextPageToken,
       });
-      console.log(res);
+
+      if (axios.isAxiosError(res)) {
+        navigate("/error");
+      }
 
       // init fetch
       if (isNil(nextPageToken)) {

@@ -12,11 +12,7 @@ export class ApiBase {
       return res.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        const { response } = error;
-
-        if (response?.status === 403) {
-          alert("ERROR !!");
-        }
+        return error;
       }
     }
   };
