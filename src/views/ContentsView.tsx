@@ -23,13 +23,16 @@ const ContentsView = observer(() => {
   // useEffect
   // init video list
   useEffect(() => {
-    fetchVideoList();
+    fetchPopularVideoList();
   }, []);
 
   useEffect(() => {
     if (!!searchModel.keyword.length) {
       isInit.current = false;
+      setNextPageToken(null);
       setVideoList([]);
+
+      fetchSearchVideoList();
     }
   }, [searchModel.keyword]);
 
@@ -49,7 +52,7 @@ const ContentsView = observer(() => {
       }
 
       if (entries[0].isIntersecting) {
-        fetchVideoList();
+        fetchPopularVideoList();
       }
     },
     [isFetchLoading, totalVideoNumber, videoList.length]
@@ -57,43 +60,75 @@ const ContentsView = observer(() => {
   useIntersectionObserver({ callback: handleObserver, ref: targetRef });
 
   // function
-  const fetchVideoList = useCallback(
-    async (keyword?: string) => {
-      try {
-        if (isFetchLoading) {
-          return;
-        }
-
-        setIsFetchLoading(true);
-
-        const res = await api.fetchPopularVideoList({
-          part: "snippet",
-          chart: "mostPopular",
-          maxResults: 24,
-          pageToken: isNil(nextPageToken) ? undefined : nextPageToken,
-        });
-
-        // init fetch
-        if (isNil(nextPageToken)) {
-          setVideoList(res.items);
-        }
-        // infinite scroll fetch
-        else {
-          setVideoList((prevVideoList) => [...prevVideoList, ...res.items]);
-        }
-
-        setTotalVideoNumber(res.pageInfo.totalResults);
-        setNextPageToken(res.nextPageToken);
-
-        isInit.current = true;
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setIsFetchLoading(false);
+  const fetchPopularVideoList = useCallback(async () => {
+    try {
+      if (isFetchLoading) {
+        return;
       }
-    },
-    [isFetchLoading, nextPageToken]
-  );
+
+      setIsFetchLoading(true);
+
+      const res = await api.fetchPopularVideoList({
+        part: "snippet",
+        chart: "mostPopular",
+        maxResults: 24,
+        pageToken: isNil(nextPageToken) ? undefined : nextPageToken,
+      });
+
+      // init fetch
+      if (isNil(nextPageToken)) {
+        setVideoList(res.items);
+      }
+      // infinite scroll fetch
+      else {
+        setVideoList((prevVideoList) => [...prevVideoList, ...res.items]);
+      }
+
+      setTotalVideoNumber(res.pageInfo.totalResults);
+      setNextPageToken(res.nextPageToken);
+
+      isInit.current = true;
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsFetchLoading(false);
+    }
+  }, [isFetchLoading, nextPageToken]);
+
+  const fetchSearchVideoList = useCallback(async () => {
+    try {
+      if (isFetchLoading) {
+        return;
+      }
+
+      setIsFetchLoading(true);
+
+      const res = await api.fetchSearchVideoList({
+        part: "snippet",
+        maxResults: 24,
+        q: searchModel.keyword,
+        pageToken: isNil(nextPageToken) ? undefined : nextPageToken,
+      });
+
+      // init fetch
+      if (isNil(nextPageToken)) {
+        setVideoList(res.items);
+      }
+      // infinite scroll fetch
+      else {
+        setVideoList((prevVideoList) => [...prevVideoList, ...res.items]);
+      }
+
+      setTotalVideoNumber(res.pageInfo.totalResults);
+      setNextPageToken(res.nextPageToken);
+
+      isInit.current = true;
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsFetchLoading(false);
+    }
+  }, []);
 
   // TSX
   return (
