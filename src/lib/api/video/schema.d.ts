@@ -1,6 +1,8 @@
+import { ChartType, PartType } from "../../../types/type";
+
 export interface VideoReq {
-  part: string;
-  chart: string;
+  part: PartType;
+  chart: ChartType;
   maxResults: number;
   pageToken?: string;
 }
