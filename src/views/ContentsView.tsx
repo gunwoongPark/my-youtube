@@ -92,8 +92,6 @@ const ContentsView = observer(() => {
       setNextPageToken(res.nextPageToken);
 
       isInit.current = true;
-    } catch (error) {
-      console.error(error);
     } finally {
       setIsFetchLoading(false);
     }
@@ -131,8 +129,6 @@ const ContentsView = observer(() => {
       setNextPageToken(res.nextPageToken);
 
       isInit.current = true;
-    } catch (error) {
-      console.error(error);
     } finally {
       setIsFetchLoading(false);
     }

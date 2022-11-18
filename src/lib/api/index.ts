@@ -11,7 +11,13 @@ export class ApiBase {
       const res = await axiosInstance.get(url, config);
       return res.data;
     } catch (error) {
-      console.error(error);
+      if (axios.isAxiosError(error)) {
+        const { response } = error;
+
+        if (response?.status === 403) {
+          console.log("in!");
+        }
+      }
     }
   };
 }

@@ -1,34 +1,22 @@
 import { observer } from "mobx-react-lite";
-import styled, { ThemeProvider } from "styled-components";
-import ContentsView from "./views/ContentsView";
-import HeaderView from "./views/HeaderView";
-import InputView from "./components/InputView";
+import { ThemeProvider } from "styled-components";
 import { themeModel } from "./model/themeModel";
 import theme from "./theme/theme";
+import { Route, Routes } from "react-router-dom";
+import ErrorPage from "./pages/ErrorPage";
+import MainPage from "./pages/MainPage";
 
 const App = observer(() => {
   return (
     <ThemeProvider
       theme={themeModel.theme === "DARK" ? theme.darkMode : theme.lightMode}
     >
-      <Pub.Container>
-        <HeaderView />
-
-        <InputView />
-        <ContentsView />
-      </Pub.Container>
+      <Routes>
+        <Route path="/" element={<MainPage />} />
+        <Route path="/error" element={<ErrorPage />} />
+      </Routes>
     </ThemeProvider>
   );
 });
 
 export default App;
-
-const Pub = {
-  Container: styled.div`
-    text-align: center;
-
-    /* theme */
-    background: ${(props) => props.theme.background};
-    color: ${(props) => props.theme.color};
-  `,
-};
