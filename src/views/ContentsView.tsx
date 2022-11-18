@@ -168,6 +168,8 @@ const ContentsView = observer(() => {
         {(() => {
           if (!isInit.current && isFetchLoading) {
             return <FullPageLoadingView />;
+          } else if (isExceeding) {
+            return <div>Exceeding Error</div>;
           } else {
             if (!!videoList.length) {
               return videoList.map((video, index) => (
@@ -180,18 +182,6 @@ const ContentsView = observer(() => {
             return <div>NONE VIDEO</div>;
           }
         })()}
-        {/* {!isInit.current && isFetchLoading ? (
-          <FullPageLoadingView />
-        ) : !!videoList.length ? (
-          videoList.map((video, index) => (
-            <VideoItemView
-              key={`video-list-item-${index}-${video.id}`}
-              video={video}
-            />
-          ))
-        ) : (
-          <div>NONE VIDEO</div>
-        )} */}
       </Pub.Container>
 
       {/* target element */}
