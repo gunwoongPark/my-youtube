@@ -6,8 +6,10 @@ import FullPageLoadingView from "../components/FullPageLoadingView";
 import { isNil } from "lodash";
 import useIntersectionObserver from "../hooks/useIntersectionObserver";
 import SpinnerView from "../components/SpinnerView";
+import { searchModel } from "../model/searchModel";
+import { observer } from "mobx-react-lite";
 
-const ContentsView = () => {
+const ContentsView = observer(() => {
   // useRef
   const targetRef = useRef<HTMLDivElement>(null);
   const isInit = useRef(false);
@@ -23,6 +25,14 @@ const ContentsView = () => {
   useEffect(() => {
     fetchVideoList();
   }, []);
+
+  useEffect(() => {
+    if (!!searchModel.keyword.length) {
+      isInit.current = false;
+      setVideoList([]);
+      console.log(searchModel.keyword);
+    }
+  }, [searchModel.keyword]);
 
   // infinite scroll setting
   const handleObserver = useCallback(
@@ -45,6 +55,7 @@ const ContentsView = () => {
 
   // function
   const fetchVideoList = useCallback(async () => {
+    console.log("in?");
     try {
       if (isFetchLoading) {
         return;
@@ -102,7 +113,7 @@ const ContentsView = () => {
       {isInit.current && isFetchLoading && <SpinnerView />}
     </>
   );
-};
+});
 
 export default ContentsView;
 
