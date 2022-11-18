@@ -30,7 +30,6 @@ const ContentsView = observer(() => {
     if (!!searchModel.keyword.length) {
       isInit.current = false;
       setVideoList([]);
-      console.log(searchModel.keyword);
     }
   }, [searchModel.keyword]);
 
@@ -38,6 +37,10 @@ const ContentsView = observer(() => {
   const handleObserver = useCallback(
     (entries: IntersectionObserverEntry[]) => {
       if (isFetchLoading) {
+        return;
+      }
+
+      if (!isInit.current) {
         return;
       }
 
@@ -54,41 +57,43 @@ const ContentsView = observer(() => {
   useIntersectionObserver({ callback: handleObserver, ref: targetRef });
 
   // function
-  const fetchVideoList = useCallback(async () => {
-    console.log("in?");
-    try {
-      if (isFetchLoading) {
-        return;
+  const fetchVideoList = useCallback(
+    async (keyword?: string) => {
+      try {
+        if (isFetchLoading) {
+          return;
+        }
+
+        setIsFetchLoading(true);
+
+        const res = await api.fetchPopularVideoList({
+          part: "snippet",
+          chart: "mostPopular",
+          maxResults: 24,
+          pageToken: isNil(nextPageToken) ? undefined : nextPageToken,
+        });
+
+        // init fetch
+        if (isNil(nextPageToken)) {
+          setVideoList(res.items);
+        }
+        // infinite scroll fetch
+        else {
+          setVideoList((prevVideoList) => [...prevVideoList, ...res.items]);
+        }
+
+        setTotalVideoNumber(res.pageInfo.totalResults);
+        setNextPageToken(res.nextPageToken);
+
+        isInit.current = true;
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsFetchLoading(false);
       }
-
-      setIsFetchLoading(true);
-
-      const res = await api.fetchPopularVideoList({
-        part: "snippet",
-        chart: "mostPopular",
-        maxResults: 24,
-        pageToken: isNil(nextPageToken) ? undefined : nextPageToken,
-      });
-
-      // init fetch
-      if (isNil(nextPageToken)) {
-        setVideoList(res.items);
-      }
-      // infinite scroll fetch
-      else {
-        setVideoList((prevVideoList) => [...prevVideoList, ...res.items]);
-      }
-
-      setTotalVideoNumber(res.pageInfo.totalResults);
-      setNextPageToken(res.nextPageToken);
-
-      isInit.current = true;
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsFetchLoading(false);
-    }
-  }, [isFetchLoading, nextPageToken]);
+    },
+    [isFetchLoading, nextPageToken]
+  );
 
   // TSX
   return (
