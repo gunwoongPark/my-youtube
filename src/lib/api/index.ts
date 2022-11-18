@@ -15,7 +15,7 @@ export class ApiBase {
         const { response } = error;
 
         if (response?.status === 403) {
-          console.log("in!");
+          alert("ERROR !!");
         }
       }
     }

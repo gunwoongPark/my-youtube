@@ -30,7 +30,6 @@ const ContentsView = observer(() => {
     if (!!searchModel.keyword.length) {
       isInit.current = false;
       setNextPageToken(null);
-      setVideoList([]);
 
       fetchSearchVideoList();
     }
@@ -98,6 +97,7 @@ const ContentsView = observer(() => {
   }, [isFetchLoading, nextPageToken]);
 
   const fetchSearchVideoList = useCallback(async () => {
+    console.log(nextPageToken);
     try {
       if (isFetchLoading) {
         return;
@@ -115,6 +115,7 @@ const ContentsView = observer(() => {
         q: searchModel.keyword,
         pageToken: isNil(nextPageToken) ? undefined : nextPageToken,
       });
+      console.log(res);
 
       // init fetch
       if (isNil(nextPageToken)) {
@@ -132,7 +133,7 @@ const ContentsView = observer(() => {
     } finally {
       setIsFetchLoading(false);
     }
-  }, []);
+  }, [isFetchLoading, nextPageToken]);
 
   // TSX
   return (
