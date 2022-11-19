@@ -28,18 +28,15 @@ const ContentsView = observer(() => {
   const [isExceeding, setIsExceeding] = useState<boolean>(false);
 
   // useEffect
-  // init video list
+  // fetch video list
   useEffect(() => {
-    fetchVideoList("VIDEO");
-  }, []);
+    isInit.current = false;
+    setNextPageToken(null);
 
-  // fetch by keyword
-  useEffect(() => {
     if (!!searchModel.keyword.length) {
-      isInit.current = false;
-      setNextPageToken(null);
-
       fetchVideoList("SEARCH");
+    } else {
+      fetchVideoList("VIDEO");
     }
   }, [searchModel.keyword]);
 
