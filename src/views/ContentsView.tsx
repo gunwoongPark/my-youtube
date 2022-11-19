@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { api } from "../lib/api/api";
 import VideoItemView from "./VideoItemView";
@@ -32,6 +32,7 @@ const ContentsView = observer(() => {
     fetchPopularVideoList();
   }, []);
 
+  // fetch by keyword
   useEffect(() => {
     if (!!searchModel.keyword.length) {
       isInit.current = false;
@@ -42,34 +43,31 @@ const ContentsView = observer(() => {
   }, [searchModel.keyword]);
 
   // infinite scroll setting
-  const handleObserver = useCallback(
-    (entries: IntersectionObserverEntry[]) => {
-      if (isFetchLoading) {
-        return;
-      }
+  const handleObserver = (entries: IntersectionObserverEntry[]) => {
+    if (isFetchLoading) {
+      return;
+    }
 
-      if (!isInit.current) {
-        return;
-      }
+    if (!isInit.current) {
+      return;
+    }
 
-      if (videoList.length === totalVideoNumber) {
-        return;
-      }
+    if (videoList.length === totalVideoNumber) {
+      return;
+    }
 
-      if (entries[0].isIntersecting) {
-        if (!!searchModel.keyword.length) {
-          fetchSearchVideoList();
-        } else {
-          fetchPopularVideoList();
-        }
+    if (entries[0].isIntersecting) {
+      if (!!searchModel.keyword.length) {
+        fetchSearchVideoList();
+      } else {
+        fetchPopularVideoList();
       }
-    },
-    [isFetchLoading, totalVideoNumber, videoList.length, searchModel.keyword]
-  );
+    }
+  };
   useIntersectionObserver({ callback: handleObserver, ref: targetRef });
 
   // function
-  const fetchPopularVideoList = useCallback(async () => {
+  const fetchPopularVideoList = async () => {
     try {
       if (isFetchLoading) {
         return;
@@ -111,9 +109,9 @@ const ContentsView = observer(() => {
     } finally {
       setIsFetchLoading(false);
     }
-  }, [isFetchLoading, nextPageToken, navigate]);
+  };
 
-  const fetchSearchVideoList = useCallback(async () => {
+  const fetchSearchVideoList = async () => {
     try {
       if (isFetchLoading) {
         return;
@@ -140,7 +138,6 @@ const ContentsView = observer(() => {
           return;
         }
       }
-
       setIsExceeding(false);
 
       // init fetch
@@ -159,7 +156,7 @@ const ContentsView = observer(() => {
     } finally {
       setIsFetchLoading(false);
     }
-  }, [isFetchLoading, nextPageToken, navigate]);
+  };
 
   // TSX
   return (

@@ -1,15 +1,21 @@
+import { debounce } from "lodash";
 import { action } from "mobx";
 import { observer } from "mobx-react-lite";
+import { ChangeEvent } from "react";
 import { searchModel } from "../model/searchModel";
 
 const InputView = observer(() => {
-  return (
-    <input
-      type="text"
-      value={searchModel.keyword}
-      onChange={action((e) => (searchModel.keyword = e.target.value))}
-    />
+  const debounceOnChange = debounce(
+    action((e) => {
+      searchModel.keyword = e.target.value;
+    }),
+    1000
   );
+  const onChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
+    debounceOnChange(e);
+  };
+
+  return <input type="text" onChange={onChangeInput} />;
 });
 
 export default InputView;
