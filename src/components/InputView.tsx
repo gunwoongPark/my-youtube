@@ -15,7 +15,7 @@ const InputView = observer(() => {
     debounceOnChange(e);
   };
 
-  return <input type="text" onChange={onChangeInput} />;
+  return <input type="text" onChange={(e) => onChangeInput(e)} />;
 });
 
 export default InputView;

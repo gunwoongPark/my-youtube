@@ -116,7 +116,6 @@ const ContentsView = observer(() => {
       isInit.current = true;
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.log(error);
         switch (error.response?.status) {
           case 403:
             setIsExceeding(true);
@@ -125,14 +124,14 @@ const ContentsView = observer(() => {
           case 404:
             navigate({
               pathname: "/error",
-              search: "?code=404&message=404 Error occurred.",
+              search: "?code=404&message=Not Found",
             });
             break;
 
           case 500:
             navigate({
               pathname: "/error",
-              search: "?code=500&message=500 Error occurred.",
+              search: "?code=500&message=Internal Server Error",
             });
             break;
 
