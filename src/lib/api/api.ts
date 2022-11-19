@@ -1,3 +1,4 @@
+import axios from "axios";
 import { isString } from "lodash";
 import { apiBase, ApiBase } from ".";
 import { SearchReq } from "./search/schema";
@@ -20,7 +21,7 @@ export class Api extends ApiBase {
     pageToken,
   }: VideoReq): Promise<any> =>
     apiBase.get(
-      `/videos?part=${part}&chart=${chart}&maxResults=${maxResults}&key=${
+      `/video?part=${part}&chart=${chart}&maxResults=${maxResults}&key=${
         process.env.REACT_APP_YOUTUBE_API_KEY
       }${isString(pageToken) ? `&pageToken=${pageToken}` : ""}`
     );

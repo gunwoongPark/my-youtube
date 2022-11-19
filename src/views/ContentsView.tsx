@@ -80,6 +80,7 @@ const ContentsView = observer(() => {
       }
 
       let res: any;
+      // fetch popular
       if (type === "VIDEO") {
         res = await api.fetchPopularVideoList({
           part: "snippet",
@@ -87,7 +88,9 @@ const ContentsView = observer(() => {
           maxResults: 24,
           pageToken: isNil(nextPageToken) ? undefined : nextPageToken,
         });
-      } else {
+      }
+      // fetch by keyword
+      else {
         res = await api.fetchSearchVideoList({
           part: "snippet",
           maxResults: 24,
@@ -96,14 +99,6 @@ const ContentsView = observer(() => {
         });
       }
 
-      if (axios.isAxiosError(res)) {
-        if (res.response?.status === 404 || res.response?.status === 500) {
-          navigate("/error");
-        } else if (res.response?.status === 403) {
-          setIsExceeding(true);
-          return;
-        }
-      }
       setIsExceeding(false);
 
       // init fetch
@@ -119,6 +114,35 @@ const ContentsView = observer(() => {
       setNextPageToken(res.nextPageToken);
 
       isInit.current = true;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log(error);
+        switch (error.response?.status) {
+          case 403:
+            setIsExceeding(true);
+            break;
+
+          case 404:
+            navigate({
+              pathname: "/error",
+              search: "?code=404&message=404 Error occurred.",
+            });
+            break;
+
+          case 500:
+            navigate({
+              pathname: "/error",
+              search: "?code=500&message=500 Error occurred.",
+            });
+            break;
+
+          default:
+            navigate({
+              pathname: "/error",
+              search: "?code=UNKNOWN&message=Sorry, an unknown error occurred.",
+            });
+        }
+      }
     } finally {
       setIsFetchLoading(false);
     }
