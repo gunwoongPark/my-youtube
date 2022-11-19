@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { DeviceType } from "../types/type";
 
 const useMediaQuery = () => {
@@ -19,14 +19,14 @@ const useMediaQuery = () => {
   }, []);
 
   // function
-  const onResizeWindow = useCallback((e: UIEvent) => {
+  const onResizeWindow = (e: UIEvent) => {
     const target = e.target as Window;
 
     if (target.innerWidth < 376) setDeviceType("MOBILE");
     else if (target.innerWidth > 375 && 769 > target.innerWidth)
       setDeviceType("TABLET");
     else setDeviceType("PC");
-  }, []);
+  };
 
   return deviceType;
 };

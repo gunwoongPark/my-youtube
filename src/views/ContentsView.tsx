@@ -10,6 +10,7 @@ import { searchModel } from "../model/searchModel";
 import { observer } from "mobx-react-lite";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { FetchType } from "../types/type";
 
 const ContentsView = observer(() => {
   // navigate
@@ -29,7 +30,7 @@ const ContentsView = observer(() => {
   // useEffect
   // init video list
   useEffect(() => {
-    fetchPopularVideoList();
+    fetchVideoList("VIDEO");
   }, []);
 
   // fetch by keyword
@@ -38,7 +39,7 @@ const ContentsView = observer(() => {
       isInit.current = false;
       setNextPageToken(null);
 
-      fetchSearchVideoList();
+      fetchVideoList("SEARCH");
     }
   }, [searchModel.keyword]);
 
@@ -58,60 +59,15 @@ const ContentsView = observer(() => {
 
     if (entries[0].isIntersecting) {
       if (!!searchModel.keyword.length) {
-        fetchSearchVideoList();
+        fetchVideoList("SEARCH");
       } else {
-        fetchPopularVideoList();
+        fetchVideoList("VIDEO");
       }
     }
   };
   useIntersectionObserver({ callback: handleObserver, ref: targetRef });
 
-  // function
-  const fetchPopularVideoList = async () => {
-    try {
-      if (isFetchLoading) {
-        return;
-      }
-
-      setIsFetchLoading(true);
-
-      const res = await api.fetchPopularVideoList({
-        part: "snippet",
-        chart: "mostPopular",
-        maxResults: 24,
-        pageToken: isNil(nextPageToken) ? undefined : nextPageToken,
-      });
-
-      if (axios.isAxiosError(res)) {
-        if (res.response?.status === 404 || res.response?.status === 500) {
-          navigate("/error");
-        } else if (res.response?.status === 403) {
-          setIsExceeding(true);
-          return;
-        }
-      }
-
-      setIsExceeding(false);
-
-      if (isNil(nextPageToken)) {
-        // init fetch
-        setVideoList(res.items);
-      }
-      // infinite scroll fetch
-      else {
-        setVideoList((prevVideoList) => [...prevVideoList, ...res.items]);
-      }
-
-      setTotalVideoNumber(res.pageInfo.totalResults);
-      setNextPageToken(res.nextPageToken);
-
-      isInit.current = true;
-    } finally {
-      setIsFetchLoading(false);
-    }
-  };
-
-  const fetchSearchVideoList = async () => {
+  const fetchVideoList = async (type: FetchType) => {
     try {
       if (isFetchLoading) {
         return;
@@ -123,12 +79,22 @@ const ContentsView = observer(() => {
         setVideoList([]);
       }
 
-      const res = await api.fetchSearchVideoList({
-        part: "snippet",
-        maxResults: 24,
-        q: searchModel.keyword,
-        pageToken: isNil(nextPageToken) ? undefined : nextPageToken,
-      });
+      let res: any;
+      if (type === "VIDEO") {
+        res = await api.fetchPopularVideoList({
+          part: "snippet",
+          chart: "mostPopular",
+          maxResults: 24,
+          pageToken: isNil(nextPageToken) ? undefined : nextPageToken,
+        });
+      } else {
+        res = await api.fetchSearchVideoList({
+          part: "snippet",
+          maxResults: 24,
+          q: searchModel.keyword,
+          pageToken: isNil(nextPageToken) ? undefined : nextPageToken,
+        });
+      }
 
       if (axios.isAxiosError(res)) {
         if (res.response?.status === 404 || res.response?.status === 500) {
