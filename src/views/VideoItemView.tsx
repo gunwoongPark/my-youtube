@@ -1,6 +1,7 @@
 import { observer } from "mobx-react-lite";
 import styled, { css } from "styled-components";
 import dateFormat from "../util/date";
+import { BsFillPlayCircleFill } from "react-icons/bs";
 
 const VideoItemView = observer((props: { video: any }) => {
   return (
@@ -15,7 +16,9 @@ const VideoItemView = observer((props: { video: any }) => {
         />
 
         <div className="overlay">
-          <i></i>
+          <i>
+            <BsFillPlayCircleFill />
+          </i>
         </div>
       </div>
       <p>{props.video.snippet.title}</p>
@@ -33,9 +36,15 @@ interface VideoItemViewStylePropsType {
 
 const Pub = {
   Container: styled.div<VideoItemViewStylePropsType>`
+    max-width: ${({ width }) =>
+      css`
+        ${width}px
+      `};
+
     .video-container {
-      display: inline-block;
       overflow: hidden;
+      display: flex;
+
       width: ${({ width }) =>
         css`
           ${width}px
@@ -48,12 +57,6 @@ const Pub = {
       border: 2px solid ${(props) => props.theme.borderColor};
       transition: border 0.2s ease-out;
 
-      img {
-        width: 100%;
-        height: 100%;
-        transition: transform 0.2s ease-out;
-      }
-
       &:hover {
         cursor: pointer;
         border: 2px solid ${(props) => props.theme.hoverBorderColor};
@@ -61,6 +64,38 @@ const Pub = {
 
       &:hover img {
         transform: scale(1.1);
+      }
+
+      img {
+        width: 100%;
+        height: 100%;
+        transition: transform 0.2s ease-out;
+      }
+
+      .overlay {
+        position: absolute;
+        width: ${({ width }) =>
+          css`
+            ${width}px
+          `};
+        height: ${({ height }) =>
+          css`
+            ${height}px
+          `};
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: rgba(0, 0, 0, 0.4);
+        opacity: 0;
+        transition: opacity 0.2s ease-out;
+
+        i {
+          font-size: 48px;
+        }
+
+        &:hover {
+          opacity: 1;
+        }
       }
     }
   `,
