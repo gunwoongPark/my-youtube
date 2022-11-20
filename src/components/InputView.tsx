@@ -9,7 +9,7 @@ const InputView = observer(() => {
     action((e) => {
       searchModel.keyword = e.target.value;
     }),
-    1000
+    500
   );
   const onChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
     debounceOnChange(e);
