@@ -169,6 +169,8 @@ const ContentsView = observer(() => {
 
       {/* target element */}
       <div ref={targetRef} />
+
+      {/* components */}
       {isInit.current && isFetchLoading && <SpinnerView />}
     </>
   );
@@ -180,6 +182,7 @@ const Pub = {
   Container: styled.div`
     display: grid;
     justify-items: center;
+    text-align: center;
 
     @media screen and (min-width: 1280px) {
       grid-template-columns: 1fr 1fr 1fr 1fr;
