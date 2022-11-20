@@ -1,9 +1,8 @@
+import { observer } from "mobx-react-lite";
 import styled, { css } from "styled-components";
 import dateFormat from "../util/date";
 
-const VideoItemView = (props: { video: any }) => {
-  console.log(props.video);
-
+const VideoItemView = observer((props: { video: any }) => {
   return (
     <Pub.Container
       width={props.video.snippet.thumbnails.medium.width}
@@ -19,7 +18,7 @@ const VideoItemView = (props: { video: any }) => {
       <p>published at {dateFormat.d1(props.video.snippet.publishedAt)}</p>
     </Pub.Container>
   );
-};
+});
 
 export default VideoItemView;
 
@@ -31,6 +30,7 @@ interface VideoItemViewStylePropsType {
 const Pub = {
   Container: styled.div<VideoItemViewStylePropsType>`
     .video-container {
+      display: inline-block;
       overflow: hidden;
       width: ${({ width }) =>
         css`

@@ -1,8 +1,9 @@
+import { observer } from "mobx-react-lite";
 import styled from "styled-components";
 import InputView from "../components/InputView";
 import { themeModel } from "../model/themeModel";
 
-const HeaderView = () => {
+const HeaderView = observer(() => {
   return (
     <Pub.Container>
       <div>
@@ -24,7 +25,7 @@ const HeaderView = () => {
       <InputView />
     </Pub.Container>
   );
-};
+});
 
 export default HeaderView;
 
