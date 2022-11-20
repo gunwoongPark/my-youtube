@@ -13,6 +13,10 @@ const VideoItemView = observer((props: { video: any }) => {
           src={props.video.snippet.thumbnails.medium.url}
           alt={`video-${props.video.id}`}
         />
+
+        <div className="overlay">
+          <i></i>
+        </div>
       </div>
       <p>{props.video.snippet.title}</p>
       <p>published at {dateFormat.d1(props.video.snippet.publishedAt)}</p>
@@ -40,7 +44,7 @@ const Pub = {
         css`
           ${height}px
         `};
-      border-radius: 4px;
+      border-radius: 6px;
       border: 2px solid ${(props) => props.theme.borderColor};
       transition: border 0.2s ease-out;
 

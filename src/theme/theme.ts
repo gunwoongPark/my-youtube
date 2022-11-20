@@ -2,15 +2,15 @@ const theme = {
   darkMode: {
     background: "#252525",
     color: "#fff",
-    borderColor: "#85858554",
-    hoverBorderColor: "#c7c7c7",
+    borderColor: "#3B3948",
+    hoverBorderColor: "#FAF7FF",
   },
 
   lightMode: {
     background: "#fff",
     color: "#252525",
-    borderColor: "#c7c7c7",
-    hoverBorderColor: "#85858554",
+    borderColor: "#FAF7FF",
+    hoverBorderColor: "#3B3948",
   },
 };
 
