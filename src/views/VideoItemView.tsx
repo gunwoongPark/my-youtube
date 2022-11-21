@@ -44,6 +44,7 @@ const Pub = {
     .video-container {
       overflow: hidden;
       display: flex;
+      position: relative;
 
       width: ${({ width }) =>
         css`
@@ -74,14 +75,8 @@ const Pub = {
 
       .overlay {
         position: absolute;
-        width: ${({ width }) =>
-          css`
-            ${width}px
-          `};
-        height: ${({ height }) =>
-          css`
-            ${height}px
-          `};
+        width: 100%;
+        height: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
