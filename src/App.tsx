@@ -5,6 +5,7 @@ import theme from "./theme/theme";
 import { Route, Routes } from "react-router-dom";
 import ErrorPage from "./pages/ErrorPage";
 import MainPage from "./pages/MainPage";
+import DetailPage from "./pages/DetailPage";
 
 const App = observer(() => {
   return (
@@ -14,6 +15,7 @@ const App = observer(() => {
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/error" element={<ErrorPage />} />
+        <Route path="/detail/:id" element={<DetailPage />} />
       </Routes>
     </ThemeProvider>
   );

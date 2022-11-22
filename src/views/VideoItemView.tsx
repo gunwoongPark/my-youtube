@@ -3,6 +3,7 @@ import styled, { css } from "styled-components";
 import dateFormat from "../util/date";
 import { BsFillPlayCircleFill } from "react-icons/bs";
 import { isMobile } from "react-device-detect";
+import { Link } from "react-router-dom";
 
 const VideoItemView = observer((props: { video: any }) => {
   return (
@@ -11,7 +12,7 @@ const VideoItemView = observer((props: { video: any }) => {
       height={props.video.snippet.thumbnails.medium.height}
       isMobile={isMobile}
     >
-      <div className="video-container">
+      <Link to="/detail/2" className="video-container">
         <img
           className="video-thumbnail"
           src={props.video.snippet.thumbnails.medium.url}
@@ -23,7 +24,7 @@ const VideoItemView = observer((props: { video: any }) => {
             <BsFillPlayCircleFill />
           </i>
         </div>
-      </div>
+      </Link>
       <p>{props.video.snippet.title}</p>
       <p>published at {dateFormat.d1(props.video.snippet.publishedAt)}</p>
     </Pub.Container>
@@ -98,6 +99,7 @@ const Pub = {
           font-size: 48px;
           transform: scale(0);
           transition: transform 0.2s ease-out;
+          color: ${(props) => props.theme.color};
         }
 
         ${({ isMobile }) => {
