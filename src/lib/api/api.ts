@@ -18,9 +18,10 @@ export class Api extends ApiBase {
     chart,
     maxResults,
     pageToken,
+    regionCode,
   }: VideoReq): Promise<any> =>
     apiBase.get(
-      `/videos?part=${part}&chart=${chart}&maxResults=${maxResults}&key=${
+      `/videos?part=${part}&chart=${chart}&maxResults=${maxResults}&regionCode=${regionCode}&key=${
         process.env.REACT_APP_YOUTUBE_API_KEY
       }${isString(pageToken) ? `&pageToken=${pageToken}` : ""}`
     );
@@ -32,9 +33,15 @@ export class Api extends ApiBase {
    * @param  {} q
    * @param  {SearchReq} pageToken}
    */
-  fetchSearchVideoList = ({ part, maxResults, q, pageToken }: SearchReq) =>
+  fetchSearchVideoList = ({
+    part,
+    maxResults,
+    q,
+    pageToken,
+    regionCode,
+  }: SearchReq) =>
     apiBase.get(
-      `/search?part=${part}&maxResults=${maxResults}&q=${q}&key=${
+      `/search?part=${part}&maxResults=${maxResults}&q=${q}&regionCode=${regionCode}&key=${
         process.env.REACT_APP_YOUTUBE_API_KEY
       }${isString(pageToken) ? `&pageToken=${pageToken}` : ""}`
     );

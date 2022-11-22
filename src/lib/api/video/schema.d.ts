@@ -5,4 +5,5 @@ export interface VideoReq {
   chart: ChartType;
   maxResults: number;
   pageToken?: string;
+  regionCode: string;
 }

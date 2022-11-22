@@ -84,6 +84,7 @@ const ContentsView = observer(() => {
           chart: "mostPopular",
           maxResults: 24,
           pageToken: isNil(nextPageToken) ? undefined : nextPageToken,
+          regionCode: "KR",
         });
       }
       // fetch by keyword
@@ -93,6 +94,7 @@ const ContentsView = observer(() => {
           maxResults: 24,
           q: searchModel.keyword,
           pageToken: isNil(nextPageToken) ? undefined : nextPageToken,
+          regionCode: "KR",
         });
       }
 

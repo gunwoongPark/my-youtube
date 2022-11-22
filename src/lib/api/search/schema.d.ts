@@ -4,5 +4,6 @@ export interface SearchReq {
   part: PartType;
   maxResults: number;
   q: string;
+  regionCode: string;
   pageToken?: string;
 }
