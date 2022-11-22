@@ -11,6 +11,7 @@ const VideoItemView = observer((props: { video: any }) => {
     >
       <div className="video-container">
         <img
+          className="video-thumbnail"
           src={props.video.snippet.thumbnails.medium.url}
           alt={`video-${props.video.id}`}
         />
@@ -67,13 +68,13 @@ const Pub = {
         transform: scale(1.1);
       }
 
-      img {
+      img.video-thumbnail {
         width: 100%;
         height: 100%;
         transition: transform 0.2s ease-out;
       }
 
-      .overlay {
+      div.overlay {
         position: absolute;
         width: 100%;
         height: 100%;
@@ -86,10 +87,16 @@ const Pub = {
 
         i {
           font-size: 48px;
+          transform: scale(0);
+          transition: transform 0.2s ease-out;
         }
 
         &:hover {
           opacity: 1;
+        }
+
+        &:hover i {
+          transform: scale(1);
         }
       }
     }
