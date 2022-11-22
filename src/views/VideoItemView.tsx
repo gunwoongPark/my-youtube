@@ -12,20 +12,15 @@ const VideoItemView = (props: { video: any }) => {
 
   // useState
   const [videoId, setVideoId] = useState<string | null>(null);
-  const [keyword, setKeyword] = useState<string | null>(null);
 
   // useEffect
   useEffect(() => {
-    setKeyword(searchParams.get("keyword"));
-  }, [searchParams]);
-
-  useEffect(() => {
-    if (isNil(keyword)) {
+    if (isNil(searchParams.get("keyword"))) {
       setVideoId(props.video.id);
     } else {
       setVideoId(props.video.id.videoId);
     }
-  }, [props.video, searchParams, keyword]);
+  }, [props.video, searchParams]);
 
   return (
     <Pub.Container

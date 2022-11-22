@@ -7,12 +7,9 @@ const ErrorPage = () => {
   // searchParams
   const searchParams = useSearchParams()[0];
 
-  const code = searchParams.get("code");
-  const message = searchParams.get("message");
-
   return (
     <Pub.Container>
-      <p>{`${code}: ${message}`}</p>
+      <p>{`${searchParams.get("code")}: ${searchParams.get("message")}`}</p>
       <button onClick={() => navigate("/")}>GO HOME!</button>
     </Pub.Container>
   );

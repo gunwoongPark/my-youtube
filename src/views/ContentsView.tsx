@@ -26,24 +26,19 @@ const ContentsView = () => {
   const [nextPageToken, setNextPageToken] = useState<string | null>(null);
   const [totalVideoNumber, setTotalVideoNumber] = useState<number | null>(null);
   const [isExceeding, setIsExceeding] = useState<boolean>(false);
-  const [keyword, setKeyword] = useState<string | null>(null);
 
   // useEffect
-  useEffect(() => {
-    setKeyword(searchParams.get("keyword"));
-  }, [searchParams]);
-
   // fetch video list
   useEffect(() => {
     isInit.current = false;
     setNextPageToken(null);
 
-    if (isNil(keyword)) {
+    if (isNil(searchParams.get("keyword"))) {
       fetchVideoList("VIDEO");
     } else {
       fetchVideoList("SEARCH");
     }
-  }, [keyword]);
+  }, [searchParams]);
 
   // infinite scroll setting
   const handleObserver = (entries: IntersectionObserverEntry[]) => {
@@ -60,7 +55,7 @@ const ContentsView = () => {
     }
 
     if (entries[0].isIntersecting) {
-      if (isNil(keyword)) {
+      if (isNil(searchParams.get("keyword"))) {
         fetchVideoList("VIDEO");
       } else {
         fetchVideoList("SEARCH");
@@ -97,7 +92,7 @@ const ContentsView = () => {
         res = await api.fetchSearchVideoList({
           part: "snippet",
           maxResults: 24,
-          q: keyword as string,
+          q: searchParams.get("keyword") as string,
           pageToken: isNil(nextPageToken) ? undefined : nextPageToken,
           regionCode: "KR",
         });
