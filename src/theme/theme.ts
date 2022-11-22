@@ -1,12 +1,12 @@
 const theme = {
-  darkMode: {
+  DARK: {
     background: "#252525",
     color: "#fff",
     borderColor: "#3B3948",
     hoverBorderColor: "#FAF7FF",
   },
 
-  lightMode: {
+  LIGHT: {
     background: "#fff",
     color: "#252525",
     borderColor: "#FAF7FF",
