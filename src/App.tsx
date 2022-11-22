@@ -13,7 +13,13 @@ const App = observer(() => {
       theme={themeModel.theme === "DARK" ? theme.darkMode : theme.lightMode}
     >
       <Routes>
-        <Route path="/" element={<MainPage />} />
+        {["/", "search"].map((path, index) => (
+          <Route
+            key={`router-path-${index}`}
+            path={path}
+            element={<MainPage />}
+          />
+        ))}
         <Route path="/error" element={<ErrorPage />} />
         <Route path="/detail" element={<DetailPage />} />
       </Routes>
