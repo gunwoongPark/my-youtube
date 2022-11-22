@@ -6,15 +6,15 @@ import FullPageLoadingView from "../components/FullPageLoadingView";
 import { isNil } from "lodash";
 import useIntersectionObserver from "../hooks/useIntersectionObserver";
 import SpinnerView from "../components/SpinnerView";
-import { searchModel } from "../model/searchModel";
-import { observer } from "mobx-react-lite";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { FetchType } from "../types/type";
 
-const ContentsView = observer(() => {
+const ContentsView = () => {
   // navigate
   const navigate = useNavigate();
+  // searchParams
+  const searchParams = useSearchParams()[0];
 
   // useRef
   const targetRef = useRef<HTMLDivElement>(null);
@@ -26,19 +26,24 @@ const ContentsView = observer(() => {
   const [nextPageToken, setNextPageToken] = useState<string | null>(null);
   const [totalVideoNumber, setTotalVideoNumber] = useState<number | null>(null);
   const [isExceeding, setIsExceeding] = useState<boolean>(false);
+  const [keyword, setKeyword] = useState<string | null>(null);
 
   // useEffect
+  useEffect(() => {
+    setKeyword(searchParams.get("keyword"));
+  }, [searchParams]);
+
   // fetch video list
   useEffect(() => {
     isInit.current = false;
     setNextPageToken(null);
 
-    if (!!searchModel.keyword.length) {
-      fetchVideoList("SEARCH");
-    } else {
+    if (isNil(keyword)) {
       fetchVideoList("VIDEO");
+    } else {
+      fetchVideoList("SEARCH");
     }
-  }, [searchModel.keyword]);
+  }, [keyword]);
 
   // infinite scroll setting
   const handleObserver = (entries: IntersectionObserverEntry[]) => {
@@ -55,10 +60,10 @@ const ContentsView = observer(() => {
     }
 
     if (entries[0].isIntersecting) {
-      if (!!searchModel.keyword.length) {
-        fetchVideoList("SEARCH");
-      } else {
+      if (isNil(keyword)) {
         fetchVideoList("VIDEO");
+      } else {
+        fetchVideoList("SEARCH");
       }
     }
   };
@@ -92,7 +97,7 @@ const ContentsView = observer(() => {
         res = await api.fetchSearchVideoList({
           part: "snippet",
           maxResults: 24,
-          q: searchModel.keyword,
+          q: keyword as string,
           pageToken: isNil(nextPageToken) ? undefined : nextPageToken,
           regionCode: "KR",
         });
@@ -176,7 +181,7 @@ const ContentsView = observer(() => {
       {isInit.current && isFetchLoading && <SpinnerView />}
     </>
   );
-});
+};
 
 export default ContentsView;
 

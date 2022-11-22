@@ -4,7 +4,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 const ErrorPage = () => {
   // navigate
   const navigate = useNavigate();
-
+  // searchParams
   const searchParams = useSearchParams()[0];
 
   const code = searchParams.get("code");

@@ -2,20 +2,30 @@ import styled, { css } from "styled-components";
 import dateFormat from "../util/date";
 import { BsFillPlayCircleFill } from "react-icons/bs";
 import { isMobile } from "react-device-detect";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { searchModel } from "../model/searchModel";
+import { isNil } from "lodash";
 
 const VideoItemView = (props: { video: any }) => {
+  // searchParams
+  const searchParams = useSearchParams()[0];
+
+  // useState
   const [videoId, setVideoId] = useState<string | null>(null);
+  const [keyword, setKeyword] = useState<string | null>(null);
+
+  // useEffect
+  useEffect(() => {
+    setKeyword(searchParams.get("keyword"));
+  }, [searchParams]);
 
   useEffect(() => {
-    if (!!searchModel.keyword.length) {
-      setVideoId(props.video.id.videoId);
-    } else {
+    if (isNil(keyword)) {
       setVideoId(props.video.id);
+    } else {
+      setVideoId(props.video.id.videoId);
     }
-  }, [props.video]);
+  }, [props.video, searchParams, keyword]);
 
   return (
     <Pub.Container
