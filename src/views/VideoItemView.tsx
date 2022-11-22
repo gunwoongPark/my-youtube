@@ -2,12 +2,14 @@ import { observer } from "mobx-react-lite";
 import styled, { css } from "styled-components";
 import dateFormat from "../util/date";
 import { BsFillPlayCircleFill } from "react-icons/bs";
+import { isMobile } from "react-device-detect";
 
 const VideoItemView = observer((props: { video: any }) => {
   return (
     <Pub.Container
       width={props.video.snippet.thumbnails.medium.width}
       height={props.video.snippet.thumbnails.medium.height}
+      isMobile={isMobile}
     >
       <div className="video-container">
         <img
@@ -33,6 +35,7 @@ export default VideoItemView;
 interface VideoItemViewStylePropsType {
   width: number;
   height: number;
+  isMobile: boolean;
 }
 
 const Pub = {
@@ -59,14 +62,20 @@ const Pub = {
       border: 2px solid ${(props) => props.theme.borderColor};
       transition: border 0.2s ease-out;
 
-      &:hover {
-        cursor: pointer;
-        border: 2px solid ${(props) => props.theme.hoverBorderColor};
-      }
+      ${({ isMobile }) => {
+        if (!isMobile) {
+          return css`
+            &:hover {
+              cursor: pointer;
+              border: 2px solid ${(props) => props.theme.hoverBorderColor};
+            }
 
-      &:hover img {
-        transform: scale(1.1);
-      }
+            &:hover img {
+              transform: scale(1.1);
+            }
+          `;
+        }
+      }}
 
       img.video-thumbnail {
         width: 100%;
@@ -91,13 +100,19 @@ const Pub = {
           transition: transform 0.2s ease-out;
         }
 
-        &:hover {
-          opacity: 1;
-        }
+        ${({ isMobile }) => {
+          if (!isMobile) {
+            return css`
+              &:hover {
+                opacity: 1;
+              }
 
-        &:hover i {
-          transform: scale(1);
-        }
+              &:hover i {
+                transform: scale(1);
+              }
+            `;
+          }
+        }}
       }
     }
   `,
