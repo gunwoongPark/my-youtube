@@ -15,7 +15,7 @@ const App = observer(() => {
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/error" element={<ErrorPage />} />
-        <Route path="/detail/:id" element={<DetailPage />} />
+        <Route path="/detail" element={<DetailPage />} />
       </Routes>
     </ThemeProvider>
   );

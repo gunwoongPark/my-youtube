@@ -1,22 +1,33 @@
-import { observer } from "mobx-react-lite";
 import styled, { css } from "styled-components";
 import dateFormat from "../util/date";
 import { BsFillPlayCircleFill } from "react-icons/bs";
 import { isMobile } from "react-device-detect";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { searchModel } from "../model/searchModel";
 
-const VideoItemView = observer((props: { video: any }) => {
+const VideoItemView = (props: { video: any }) => {
+  const [videoId, setVideoId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!!searchModel.keyword.length) {
+      setVideoId(props.video.id.videoId);
+    } else {
+      setVideoId(props.video.id);
+    }
+  }, [props.video]);
+
   return (
     <Pub.Container
       width={props.video.snippet.thumbnails.medium.width}
       height={props.video.snippet.thumbnails.medium.height}
       isMobile={isMobile}
     >
-      <Link to="/detail/2" className="video-container">
+      <Link to={`/detail?id=${videoId}`} className="video-container">
         <img
           className="video-thumbnail"
           src={props.video.snippet.thumbnails.medium.url}
-          alt={`video-${props.video.id}`}
+          alt={`video-${videoId}`}
         />
 
         <div className="overlay">
@@ -29,7 +40,7 @@ const VideoItemView = observer((props: { video: any }) => {
       <p>published at {dateFormat.d1(props.video.snippet.publishedAt)}</p>
     </Pub.Container>
   );
-});
+};
 
 export default VideoItemView;
 
