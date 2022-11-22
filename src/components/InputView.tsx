@@ -25,7 +25,7 @@ const InputView = () => {
     } else {
       navigate({ pathname: "/" });
     }
-  }, 750);
+  }, 1000);
   const onChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.target.value);
     debounceOnChange(e);

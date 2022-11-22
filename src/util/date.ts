@@ -1,6 +1,10 @@
 import moment from "moment";
 
 const dateFormat = {
+  /**
+   * 영상 등록일 계산
+   * @param  {string} ISO8601String
+   */
   d1: (ISO8601String: string) => {
     const current = moment();
 
