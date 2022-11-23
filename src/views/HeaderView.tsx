@@ -1,4 +1,3 @@
-import { ChangeEvent } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
@@ -15,17 +14,6 @@ const HeaderView = () => {
     (state: RootStateType) => state.theme
   );
 
-  // function
-  const onChangeTheme = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.checked) {
-      dispatch(toggleTheme("DARK"));
-      localStorage.setItem("theme", "DARK");
-    } else {
-      dispatch(toggleTheme("LIGHT"));
-      localStorage.setItem("theme", "LIGHT");
-    }
-  };
-
   return (
     <Pub.Container>
       <div>
@@ -39,7 +27,7 @@ const HeaderView = () => {
             type="checkbox"
             id="is-dark-mode-button"
             checked={themeState === "DARK"}
-            onChange={(e) => onChangeTheme(e)}
+            onChange={(e) => dispatch(toggleTheme(e))}
           />
         </span>
       </div>

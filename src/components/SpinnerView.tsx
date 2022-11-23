@@ -1,7 +1,8 @@
 import { useSelector } from "react-redux";
 import { FadeLoader } from "react-spinners";
 import styled from "styled-components";
-import { RootStateType } from "../types/type";
+import theme from "../theme/theme";
+import { RootStateType, ThemeType } from "../types/type";
 
 const SpinnerView = () => {
   // state
@@ -11,7 +12,7 @@ const SpinnerView = () => {
 
   return (
     <Pub.Container>
-      <FadeLoader color={themeState === "DARK" ? "#ffffff" : "#000000"} />
+      <FadeLoader color={theme[themeState as ThemeType].color} />
     </Pub.Container>
   );
 };
