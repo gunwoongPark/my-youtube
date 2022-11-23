@@ -39,9 +39,10 @@ export class Api extends ApiBase {
     q,
     pageToken,
     regionCode,
+    type,
   }: SearchReq) =>
     apiBase.get(
-      `/search?part=${part}&maxResults=${maxResults}&q=${q}&regionCode=${regionCode}&key=${
+      `/search?part=${part}&maxResults=${maxResults}&q=${q}&regionCode=${regionCode}&type=${type}&key=${
         process.env.REACT_APP_YOUTUBE_API_KEY
       }${isString(pageToken) ? `&pageToken=${pageToken}` : ""}`
     );

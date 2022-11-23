@@ -95,6 +95,7 @@ const ContentsView = () => {
           q: searchParams.get("keyword") as string,
           pageToken: isNil(nextPageToken) ? undefined : nextPageToken,
           regionCode: "KR",
+          type: "video",
         });
       }
 

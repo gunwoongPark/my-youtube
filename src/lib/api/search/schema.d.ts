@@ -1,4 +1,4 @@
-import { PartType } from "../../../types/type";
+import { PartType, SearchType } from "../../../types/type";
 
 export interface SearchReq {
   part: PartType;
@@ -6,4 +6,5 @@ export interface SearchReq {
   q: string;
   regionCode: string;
   pageToken?: string;
+  type: SearchType;
 }

@@ -8,6 +8,8 @@ export type PartType = "snippet" | "id";
 
 export type ChartType = "mostPopular";
 
+export type SearchType = "channel" | "playlist" | "video";
+
 export type FetchType = "VIDEO" | "SEARCH";
 
 export type ThemeStateType = {
