@@ -1,9 +1,7 @@
-import { observer } from "mobx-react-lite";
 import styled from "styled-components";
 import InputView from "../components/InputView";
-import { themeModel } from "../model/themeModel";
 
-const HeaderView = observer(() => {
+const HeaderView = () => {
   return (
     <Pub.Container>
       <div>
@@ -11,13 +9,16 @@ const HeaderView = observer(() => {
 
         <span>
           <label htmlFor="is-dark-mode-button">
-            {themeModel.theme === "DARK" ? "LIGHT MODE" : "DARK MODE"}
+            {/* {themeModel.theme === "DARK" ? "LIGHT MODE" : "DARK MODE"} */}
+            {"DARK MODE"}
           </label>
           <input
             type="checkbox"
             id="is-dark-mode-button"
-            checked={themeModel.theme === "DARK"}
-            onChange={(e) => themeModel.onToggleTheme(e)}
+            // checked={themeModel.theme === "DARK"}
+            // onChange={(e) => themeModel.onToggleTheme(e)}
+            checked
+            onChange={(e) => console.log(e.target.checked)}
           />
         </span>
       </div>
@@ -25,7 +26,7 @@ const HeaderView = observer(() => {
       <InputView />
     </Pub.Container>
   );
-});
+};
 
 export default HeaderView;
 

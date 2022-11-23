@@ -1,11 +1,13 @@
 import { FadeLoader } from "react-spinners";
 import styled from "styled-components";
-import { themeModel } from "../model/themeModel";
 
 const SpinnerView = () => {
   return (
     <Pub.Container>
-      <FadeLoader color={themeModel.theme === "DARK" ? "#ffffff" : "#000000"} />
+      <FadeLoader
+        // color={themeModel.theme === "DARK" ? "#ffffff" : "#000000"}
+        color="DARK"
+      />
     </Pub.Container>
   );
 };
