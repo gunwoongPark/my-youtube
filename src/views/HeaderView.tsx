@@ -2,7 +2,7 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import InputView from "../components/InputView";
-import { toggleTheme } from "../store/reducers/theme";
+import { toggleTheme } from "../store/theme/theme";
 import { RootStateType } from "../types/type";
 
 const HeaderView = () => {

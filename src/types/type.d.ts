@@ -1,5 +1,4 @@
 import rootReducer from "../store";
-import { toggleTheme } from "../store/reducers/theme";
 
 export type DeviceType = "MOBILE" | "TABLET" | "PC";
 
@@ -15,6 +14,9 @@ export type ThemeStateType = {
   theme: ThemeType | null;
 };
 
-export type ThemeActionType = ReturnType<typeof toggleTheme>;
+export type ThemeActionType = {
+  type: string;
+  theme: ThemeType;
+};
 
 export type RootStateType = ReturnType<typeof rootReducer>;

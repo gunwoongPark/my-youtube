@@ -2,12 +2,12 @@ import { ChangeEvent } from "react";
 import { ThemeActionType, ThemeStateType, ThemeType } from "../../types/type";
 
 // action type
-export const TOGGLE = "THEME/TOGGLE";
+const TOGGLE = "theme/TOGGLE";
 
 // action
 export const toggleTheme = (
   e: ChangeEvent<HTMLInputElement>
-): { type: string; theme: ThemeType } => {
+): ThemeActionType => {
   if (e.target.checked) {
     localStorage.setItem("theme", "DARK");
     return { type: TOGGLE, theme: "DARK" };
@@ -21,8 +21,7 @@ export const toggleTheme = (
 const initialState: ThemeStateType = {
   theme: null,
 };
-
-// setting initial state
+// setting initial state(local storage)
 (() => {
   const theme: ThemeType | null = localStorage.getItem(
     "theme"
