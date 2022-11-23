@@ -5,21 +5,27 @@ import ErrorPage from "./pages/ErrorPage";
 import MainPage from "./pages/MainPage";
 import DetailPage from "./pages/DetailPage";
 import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { RootStateType } from "./store";
+import { ThemeType } from "./types/type";
 
 const App = () => {
+  // state
+  const { theme: themeState } = useSelector(
+    (state: RootStateType) => state.theme
+  );
+
   // useEffect
-  // useEffect(() => {
-  //   const body = document.querySelector("body") as HTMLBodyElement;
-  //   body.style.background = theme[themeModel.theme].background;
-  //   body.style.color = theme[themeModel.theme].color;
-  //   body.style.transition = "background 0.2s ease-out, color 0.2s ease-out";
-  // }, [themeModel.theme]);
+  useEffect(() => {
+    const body = document.querySelector("body") as HTMLBodyElement;
+
+    body.style.background = theme[themeState as ThemeType].background;
+    body.style.color = theme[themeState as ThemeType].color;
+    body.style.transition = "background 0.2s ease-out, color 0.2s ease-out";
+  }, [themeState]);
 
   return (
-    <ThemeProvider
-      // theme={themeModel.theme === "DARK" ? theme.DARK : theme.LIGHT}
-      theme="DARK"
-    >
+    <ThemeProvider theme={theme[themeState as ThemeType]}>
       <Routes>
         {["/", "search"].map((path, index) => (
           <Route

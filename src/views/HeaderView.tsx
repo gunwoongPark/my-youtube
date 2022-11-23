@@ -1,7 +1,31 @@
+import { ChangeEvent } from "react";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 import InputView from "../components/InputView";
+import { RootStateType } from "../store";
+import { toggleTheme } from "../store/reducers/theme";
 
 const HeaderView = () => {
+  // dispatch
+  const dispatch = useDispatch();
+
+  // state
+  const { theme: themeState } = useSelector(
+    (state: RootStateType) => state.theme
+  );
+
+  // function
+  const onChangeTheme = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.checked) {
+      dispatch(toggleTheme("DARK"));
+      localStorage.setItem("theme", "DARK");
+    } else {
+      dispatch(toggleTheme("LIGHT"));
+      localStorage.setItem("theme", "LIGHT");
+    }
+  };
+
   return (
     <Pub.Container>
       <div>
@@ -9,16 +33,13 @@ const HeaderView = () => {
 
         <span>
           <label htmlFor="is-dark-mode-button">
-            {/* {themeModel.theme === "DARK" ? "LIGHT MODE" : "DARK MODE"} */}
-            {"DARK MODE"}
+            {themeState === "DARK" ? "SET LIGHT MODE" : "SET DARK MODE"}
           </label>
           <input
             type="checkbox"
             id="is-dark-mode-button"
-            // checked={themeModel.theme === "DARK"}
-            // onChange={(e) => themeModel.onToggleTheme(e)}
-            checked
-            onChange={(e) => console.log(e.target.checked)}
+            checked={themeState === "DARK"}
+            onChange={(e) => onChangeTheme(e)}
           />
         </span>
       </div>

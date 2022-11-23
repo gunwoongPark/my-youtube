@@ -4,6 +4,11 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
+import { Provider } from "react-redux";
+import { createStore } from "redux";
+import rootReducer from "./store";
+
+const store = createStore(rootReducer);
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -11,7 +16,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <BrowserRouter>
     {/* <React.StrictMode> */}
-    <App />
+    <Provider store={store}>
+      <App />
+    </Provider>
     {/* </React.StrictMode> */}
   </BrowserRouter>
 );
