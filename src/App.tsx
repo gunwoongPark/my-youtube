@@ -6,8 +6,7 @@ import MainPage from "./pages/MainPage";
 import DetailPage from "./pages/DetailPage";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { RootStateType } from "./store";
-import { ThemeType } from "./types/type";
+import { RootStateType, ThemeType } from "./types/type";
 
 const App = () => {
   // state

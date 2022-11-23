@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { FadeLoader } from "react-spinners";
 import styled from "styled-components";
-import { RootStateType } from "../store";
+import { RootStateType } from "../types/type";
 
 const FullPageLoadingView = () => {
   // state

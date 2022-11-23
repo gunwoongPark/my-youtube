@@ -1,4 +1,4 @@
-import { ThemeType } from "../../types/type";
+import { ThemeActionType, ThemeStateType, ThemeType } from "../../types/type";
 
 // action type
 export const TOGGLE = "THEME/TOGGLE";
@@ -9,9 +9,6 @@ export const toggleTheme = (theme: ThemeType) => {
 };
 
 // initial state
-type ThemeStateType = {
-  theme: ThemeType | null;
-};
 const initialState: ThemeStateType = {
   theme: null,
 };
@@ -37,7 +34,6 @@ const initialState: ThemeStateType = {
 })();
 
 // reducer
-type ThemeActionType = ReturnType<typeof toggleTheme>;
 const theme = (
   state = initialState,
   action: ThemeActionType
