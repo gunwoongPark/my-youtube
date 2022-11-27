@@ -23,12 +23,14 @@ const InputView = () => {
   const debounceOnChange = debounce((e) => {
     if (!!e.target.value.length) {
       navigate({ pathname: "/search", search: `?keyword=${e.target.value}` });
-    } else {
-      navigate({ pathname: "/" });
     }
   }, 1000);
+
   const onChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.target.value);
+    if (!e.target.value.length) {
+      navigate({ pathname: "/" });
+    }
     debounceOnChange(e);
   };
 
