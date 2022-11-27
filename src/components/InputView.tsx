@@ -1,6 +1,7 @@
 import { debounce } from "lodash";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import styled from "styled-components";
 
 const InputView = () => {
   // navigate
@@ -32,8 +33,29 @@ const InputView = () => {
   };
 
   return (
-    <input type="text" value={searchInput} onChange={(e) => onChangeInput(e)} />
+    <Input
+      placeholder="type the video you want to search for"
+      type="text"
+      value={searchInput}
+      onChange={(e) => onChangeInput(e)}
+    />
   );
 };
 
 export default InputView;
+
+const Input = styled.input`
+  border: 1px solid #303030;
+  outline: none;
+  width: 280px;
+  height: 24px;
+  padding: 8px 12px;
+  border-radius: 7px;
+  background: ${(props) => props.theme.background};
+  color: ${(props) => props.theme.color};
+
+  &:focus {
+    border: 1px solid #0075ff;
+    outline: none;
+  }
+`;

@@ -4,6 +4,7 @@ const theme = {
     color: "#fff",
     borderColor: "#3B3948",
     hoverBorderColor: "#FAF7FF",
+    inputBorderColor: "#303030",
   },
 
   LIGHT: {
@@ -11,6 +12,7 @@ const theme = {
     color: "#252525",
     borderColor: "#FAF7FF",
     hoverBorderColor: "#3B3948",
+    inputBorderColor: "#303030",
   },
 };
 

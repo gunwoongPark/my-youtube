@@ -45,8 +45,10 @@ const VideoItemView = (props: { video: any }) => {
           </i>
         </div>
       </Link>
-      <p>{props.video.snippet.title}</p>
-      <p>published at {dateFormat.d1(props.video.snippet.publishedAt)}</p>
+      <p className="video-title">{props.video.snippet.title}</p>
+      <p className="published-at-time">
+        published at {dateFormat.d1(props.video.snippet.publishedAt)}
+      </p>
     </Pub.Container>
   );
 };
@@ -119,7 +121,7 @@ const Pub = {
           font-size: 48px;
           transform: scale(0);
           transition: transform 0.2s ease-out;
-          color: ${(props) => props.theme.color};
+          color: #ffffff;
         }
 
         ${({ isMobile }) => {
@@ -136,6 +138,13 @@ const Pub = {
           }
         }}
       }
+    }
+
+    .video-title {
+      margin-top: 12px;
+    }
+    .published-at-time {
+      margin-bottom: 6px;
     }
   `,
 };

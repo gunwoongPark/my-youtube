@@ -183,6 +183,7 @@ export default ContentsView;
 
 const Pub = {
   Container: styled.div`
+    margin-top: 36px;
     display: grid;
     justify-items: center;
     text-align: center;
