@@ -1,18 +1,16 @@
-import { useSelector } from "react-redux";
+import { useContext } from "react";
 import { FadeLoader } from "react-spinners";
 import styled from "styled-components";
+import { themeContext } from "../context/ThemeProvider";
 import theme from "../theme/theme";
-import { RootStateType, ThemeType } from "../types/type";
+import { ThemeType } from "../types/type";
 
 const FullPageLoadingView = () => {
-  // state
-  const { theme: themeState } = useSelector(
-    (state: RootStateType) => state.theme
-  );
+  const context = useContext(themeContext);
 
   return (
     <Pub.Container>
-      <FadeLoader color={theme[themeState as ThemeType].color} />
+      <FadeLoader color={theme[context?.value as ThemeType].color} />
     </Pub.Container>
   );
 };

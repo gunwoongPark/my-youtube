@@ -1,19 +1,11 @@
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
 import styled from "styled-components";
 import InputView from "../components/InputView";
-import { toggleTheme } from "../store/theme/theme";
-import { RootStateType } from "../types/type";
 import YoutubeLogo from "../assets/youtube_logo.png";
+import { useContext } from "react";
+import { themeContext } from "../context/ThemeProvider";
 
 const HeaderView = () => {
-  // dispatch
-  const dispatch = useDispatch();
-
-  // state
-  const { theme: themeState } = useSelector(
-    (state: RootStateType) => state.theme
-  );
+  const context = useContext(themeContext);
 
   return (
     <Pub.Container>
@@ -25,13 +17,13 @@ const HeaderView = () => {
 
         <span>
           <label htmlFor="is-dark-mode-button">
-            {themeState === "DARK" ? "SET LIGHT MODE" : "SET DARK MODE"}
+            {context?.value === "DARK" ? "SET LIGHT MODE" : "SET DARK MODE"}
           </label>
           <input
             type="checkbox"
             id="is-dark-mode-button"
-            checked={themeState === "DARK"}
-            onChange={(e) => dispatch(toggleTheme(e))}
+            checked={context?.value === "DARK"}
+            onChange={(e) => context?.action(e)}
           />
         </span>
       </div>
