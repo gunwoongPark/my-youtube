@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { api } from "../lib/api/api";
 import VideoItemView from "./VideoItemView";
 import FullPageLoadingView from "../components/FullPageLoadingView";
@@ -150,7 +150,7 @@ const ContentsView = () => {
   // TSX
   return (
     <>
-      <Pub.Container>
+      <Pub.Container isNoneData={!videoList.length}>
         {(() => {
           if (!isInit.current && isFetchLoading) {
             return <FullPageLoadingView />;
@@ -165,7 +165,7 @@ const ContentsView = () => {
                 />
               ));
             }
-            return <div>NONE VIDEO</div>;
+            return <span>NONE VIDEO</span>;
           }
         })()}
       </Pub.Container>
@@ -181,23 +181,39 @@ const ContentsView = () => {
 
 export default ContentsView;
 
+interface ContentsViewStylePropsType {
+  isNoneData: boolean;
+}
+
 const Pub = {
-  Container: styled.div`
+  Container: styled.div<ContentsViewStylePropsType>`
     margin-top: 36px;
-    display: grid;
-    justify-items: center;
     text-align: center;
 
-    @media screen and (min-width: 1280px) {
-      grid-template-columns: 1fr 1fr 1fr 1fr;
-    }
+    ${({ isNoneData }) => {
+      if (isNoneData) {
+        return css`
+          display: flex;
+          justify-content: center;
+        `;
+      } else {
+        return css`
+          display: grid;
+          justify-items: center;
 
-    @media screen and (max-width: 1279px) and (min-width: 960px) {
-      grid-template-columns: 1fr 1fr 1fr;
-    }
+          @media screen and (min-width: 1280px) {
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+          }
 
-    @media screen and (max-width: 959px) and (min-width: 640px) {
-      grid-template-columns: 1fr 1fr;
-    }
+          @media screen and (max-width: 1279px) and (min-width: 960px) {
+            grid-template-columns: 1fr 1fr 1fr;
+          }
+
+          @media screen and (max-width: 959px) and (min-width: 640px) {
+            grid-template-columns: 1fr 1fr;
+          }
+        `;
+      }
+    }}
   `,
 };
