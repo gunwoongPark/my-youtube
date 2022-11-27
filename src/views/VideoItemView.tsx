@@ -46,9 +46,7 @@ const VideoItemView = (props: { video: any }) => {
         </div>
       </Link>
       <p className="video-title">{props.video.snippet.title}</p>
-      <p className="published-at-time">
-        published at {dateFormat.d1(props.video.snippet.publishedAt)}
-      </p>
+      <p>published at {dateFormat.d1(props.video.snippet.publishedAt)}</p>
     </Pub.Container>
   );
 };
@@ -63,6 +61,7 @@ interface VideoItemViewStylePropsType {
 
 const Pub = {
   Container: styled.div<VideoItemViewStylePropsType>`
+    margin-top: 6px;
     max-width: ${({ width }) =>
       css`
         ${width}px
@@ -142,9 +141,6 @@ const Pub = {
 
     .video-title {
       margin-top: 12px;
-    }
-    .published-at-time {
-      margin-bottom: 6px;
     }
   `,
 };
