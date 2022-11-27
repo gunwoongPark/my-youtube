@@ -7,10 +7,6 @@ import { useEffect, useState } from "react";
 import { isNil } from "lodash";
 
 const VideoItemView = (props: { video: any }) => {
-  useEffect(() => {
-    console.log(props.video);
-  }, []);
-
   // searchParams
   const searchParams = useSearchParams()[0];
 
