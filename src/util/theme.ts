@@ -1,22 +1,19 @@
+import { isNil } from "lodash";
 import { ThemeType } from "../types/type";
 
-const setInitialTheme = () => {
-  const theme: ThemeType | null = localStorage.getItem(
+const setInitialTheme = (): ThemeType => {
+  const localStorageTheme: ThemeType | null = localStorage.getItem(
     "theme"
   ) as ThemeType | null;
 
-  if (!!theme) {
-    if (theme === "DARK") {
-      return "DARK";
-    } else {
-      return "LIGHT";
-    }
-  } else {
-    const theme = window.matchMedia("(prefers-color-scheme: dark)").matches
+  if (isNil(localStorageTheme)) {
+    const osTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
       ? "DARK"
       : "LIGHT";
-    return theme;
+    return osTheme;
   }
+
+  return localStorageTheme;
 };
 
 export default setInitialTheme;
