@@ -4,6 +4,7 @@ import styled from "styled-components";
 import InputView from "../components/InputView";
 import { toggleTheme } from "../store/theme/theme";
 import { RootStateType } from "../types/type";
+import YoutubeLogo from "../assets/youtube_logo.png";
 
 const HeaderView = () => {
   // dispatch
@@ -17,7 +18,10 @@ const HeaderView = () => {
   return (
     <Pub.Container>
       <div>
-        <p>MY-YOUTUBE</p>
+        <div className="header-container">
+          <img src={YoutubeLogo} alt="youtube_logo" />
+          <h1>WOONGTUBE</h1>
+        </div>
 
         <span>
           <label htmlFor="is-dark-mode-button">
@@ -44,8 +48,18 @@ const Pub = {
     width: 100%;
     text-align: center;
 
-    & p {
-      display: inline-block;
+    .header-container {
+      display: inline-flex;
+      align-items: center;
+
+      img {
+        width: 122px;
+      }
+      h1 {
+        display: inline-block;
+        font-size: 36px;
+        color: ${(props) => props.theme.color};
+      }
     }
 
     & span {
