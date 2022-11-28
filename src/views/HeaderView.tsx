@@ -12,7 +12,7 @@ const HeaderView = () => {
       <div>
         <div className="header-container">
           <img src={YoutubeLogo} alt="youtube_logo" />
-          <span>WOONGTUBE</span>
+          <h1>WOONGTUBE</h1>
         </div>
 
         <span>
@@ -46,11 +46,11 @@ const Pub = {
 
       img {
         width: 56px;
+        margin-right: 6px;
       }
-      /* h1 {
-        font-size: 36px;
-        color: ${(props) => props.theme.color};
-      } */
+      h1 {
+        font-size: 28px;
+      }
     }
 
     & span {
