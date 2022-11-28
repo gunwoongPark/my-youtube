@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import InputView from "../components/InputView";
-import YoutubeLogo from "../assets/youtube_logo.png";
+import YoutubeLogo from "../assets/youtube-icon-1.svg";
 import { useContext } from "react";
 import { themeContext } from "../context/ThemeProvider";
 
@@ -12,7 +12,7 @@ const HeaderView = () => {
       <div>
         <div className="header-container">
           <img src={YoutubeLogo} alt="youtube_logo" />
-          <h1>WOONGTUBE</h1>
+          <span>WOONGTUBE</span>
         </div>
 
         <span>
@@ -45,13 +45,12 @@ const Pub = {
       align-items: center;
 
       img {
-        width: 122px;
+        width: 56px;
       }
-      h1 {
-        display: inline-block;
+      /* h1 {
         font-size: 36px;
         color: ${(props) => props.theme.color};
-      }
+      } */
     }
 
     & span {
