@@ -39,6 +39,7 @@ const Pub = {
   Container: styled.div`
     width: 100%;
     text-align: center;
+    margin-top: 12px;
 
     .header-container {
       display: inline-flex;

@@ -35,29 +35,37 @@ const InputView = () => {
   };
 
   return (
-    <Input
-      placeholder="type the video you want to search for"
-      type="text"
-      value={searchInput}
-      onChange={(e) => onChangeInput(e)}
-    />
+    <Pub.Container>
+      <input
+        placeholder="type the video you want to search for"
+        type="text"
+        value={searchInput}
+        onChange={(e) => onChangeInput(e)}
+      />
+    </Pub.Container>
   );
 };
 
 export default InputView;
 
-const Input = styled.input`
-  border: 1px solid #303030;
-  outline: none;
-  width: 280px;
-  height: 24px;
-  padding: 8px 12px;
-  border-radius: 7px;
-  background: ${(props) => props.theme.background};
-  color: ${(props) => props.theme.color};
+const Pub = {
+  Container: styled.div`
+    margin-top: 12px;
 
-  &:focus {
-    border: 1px solid #0075ff;
-    outline: none;
-  }
-`;
+    input {
+      border: 1px solid #303030;
+      outline: none;
+      width: 280px;
+      height: 24px;
+      padding: 8px 12px;
+      border-radius: 7px;
+      background: ${(props) => props.theme.background};
+      color: ${(props) => props.theme.color};
+
+      &:focus {
+        border: 1px solid #0075ff;
+        outline: none;
+      }
+    }
+  `,
+};
