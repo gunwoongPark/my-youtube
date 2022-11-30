@@ -7,6 +7,8 @@ import DetailPage from "./pages/DetailPage";
 import { useContext, useEffect } from "react";
 import { themeContext } from "./context/ThemeProvider";
 import { ThemeType } from "./types/type";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
 
 declare module "styled-components" {
   export interface DefaultTheme {
@@ -26,6 +28,10 @@ body{
 `;
 
 const App = () => {
+  // queryClient
+  const queryClient = new QueryClient();
+
+  // context
   const context = useContext(themeContext);
 
   // useEffect
@@ -37,17 +43,21 @@ const App = () => {
 
   return (
     <ThemeProvider theme={theme[context?.value as ThemeType]}>
-      <Routes>
-        {["/", "search"].map((path, index) => (
-          <Route
-            key={`router-path-${index}`}
-            path={path}
-            element={<MainPage />}
-          />
-        ))}
-        <Route path="/error" element={<ErrorPage />} />
-        <Route path="/detail" element={<DetailPage />} />
-      </Routes>
+      <QueryClientProvider client={queryClient}>
+        <Routes>
+          {["/", "search"].map((path, index) => (
+            <Route
+              key={`router-path-${index}`}
+              path={path}
+              element={<MainPage />}
+            />
+          ))}
+          <Route path="/error" element={<ErrorPage />} />
+          <Route path="/detail" element={<DetailPage />} />
+        </Routes>
+
+        <ReactQueryDevtools />
+      </QueryClientProvider>
       <GlobalStyle />
     </ThemeProvider>
   );
