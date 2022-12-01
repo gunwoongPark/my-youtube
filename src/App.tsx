@@ -3,9 +3,10 @@ import theme from "./theme/theme";
 import { useContext, useEffect } from "react";
 import { themeContext } from "./context/ThemeProvider";
 import { ThemeType } from "./types/type";
-import { QueryClient, QueryClientProvider } from "react-query";
+import { QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import Routes from "./Routes";
+import { queryClient } from "./react-query/queryClient";
 
 declare module "styled-components" {
   export interface DefaultTheme {
@@ -25,9 +26,6 @@ body{
 `;
 
 const App = () => {
-  // queryClient
-  const queryClient = new QueryClient();
-
   // context
   const context = useContext(themeContext);
 
