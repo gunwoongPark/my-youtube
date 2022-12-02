@@ -9,6 +9,19 @@ import SpinnerView from "../components/SpinnerView";
 import axios from "axios";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { FetchType } from "../types/type";
+import { useInfiniteQuery } from "react-query";
+
+const _fetchVideoList = async (nextPageToken?: string) => {
+  const res = await api.fetchPopularVideoList({
+    part: "snippet",
+    chart: "mostPopular",
+    maxResults: 24,
+    pageToken: isNil(nextPageToken) ? undefined : nextPageToken,
+    regionCode: "KR",
+  });
+
+  return res;
+};
 
 const ContentsView = () => {
   // navigate
@@ -26,6 +39,24 @@ const ContentsView = () => {
   const [nextPageToken, setNextPageToken] = useState<string | null>(null);
   const [totalVideoNumber, setTotalVideoNumber] = useState<number | null>(null);
   const [isExceeding, setIsExceeding] = useState<boolean>(false);
+
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isLoading,
+    isFetching,
+    isError,
+    error,
+  } = useInfiniteQuery(
+    "videoList",
+    ({ pageParam = undefined }) => _fetchVideoList(pageParam),
+    { getNextPageParam: (lastPage) => lastPage.nextPageToken || undefined }
+  );
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
 
   // useEffect
   // fetch video list
