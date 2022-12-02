@@ -29,7 +29,7 @@ const VideoListView = () => {
     fetchNextPage,
     hasNextPage,
     isLoading,
-    isFetching,
+    isFetched,
     isError,
     error,
   } = useInfiniteQuery(
@@ -38,49 +38,26 @@ const VideoListView = () => {
     { getNextPageParam: (lastPage) => lastPage.nextPageToken || undefined }
   );
 
-  useEffect(() => {
-    console.log(data);
-    if (!!data) {
-      // if (data.pages.items) {
-      // }
-      // setVideoList((prevVideoList) => [...prevVideoList, ...data.pages?.items]);
-    }
-
-    // if (!!data.pages.) {
-    //   setVideoList(data.pages);
-    // }
-  }, [data]);
-
   if (isLoading) return <></>;
   if (isError) return <>{error}</>;
 
   return (
     <>
       <Pub.Container>
-        {/* {(() => {
-          if (!isInit.current && isFetchLoading) {
-            return <FullPageLoadingView />;
-          } else if (isExceeding) {
-            return <div>Exceeding Error</div>;
-          } else {
-            if (!!videoList.length) {
-              return videoList.map((video, index) => (
-                <VideoItemView
-                  key={`video-list-item-${index}-${video.id}`}
-                  video={video}
-                />
-              ));
-            }
-            return <span>NONE VIDEO</span>;
-          }
-        })()} */}
+        {data.pages.map((pageData) => {
+          return pageData.items.map((video: any, index: number) => {
+            return (
+              <VideoItemView
+                key={`video-list-item-${index}-${video.id}`}
+                video={video}
+              />
+            );
+          });
+        })}
       </Pub.Container>
 
       {/* target element */}
       <div ref={targetRef} />
-
-      {/* components */}
-      {/* {isInit.current && isFetchLoading && <SpinnerView />} */}
     </>
   );
 };
