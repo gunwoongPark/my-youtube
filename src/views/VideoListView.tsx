@@ -2,6 +2,7 @@ import { isNil } from "lodash";
 import { useEffect, useRef, useState } from "react";
 import { useInfiniteQuery } from "react-query";
 import styled, { css } from "styled-components";
+import FullPageLoadingView from "../components/FullPageLoadingView";
 import { api } from "../lib/api/api";
 import VideoItemView from "./VideoItemView";
 
@@ -38,7 +39,7 @@ const VideoListView = () => {
     { getNextPageParam: (lastPage) => lastPage.nextPageToken || undefined }
   );
 
-  if (isLoading) return <></>;
+  if (isLoading) return <FullPageLoadingView />;
   if (isError) return <>{error}</>;
 
   return (
