@@ -9,13 +9,29 @@ import useIntersectionObserver from "../hooks/useIntersectionObserver";
 import { api } from "../lib/api/api";
 import VideoItemView from "./VideoItemView";
 
-const fetchVideoList = async (nextPageToken?: string) => {
+const fetchPopularVideoList = async (nextPageToken?: string) => {
   const res = await api.fetchPopularVideoList({
     part: "snippet",
     chart: "mostPopular",
     maxResults: 24,
     pageToken: isNil(nextPageToken) ? undefined : nextPageToken,
     regionCode: "KR",
+  });
+
+  return res;
+};
+
+const fetchSearchVideoList = async (
+  keyword: string,
+  nextPageToken?: string
+) => {
+  const res = await api.fetchSearchVideoList({
+    part: "snippet",
+    maxResults: 24,
+    q: keyword,
+    pageToken: isNil(nextPageToken) ? undefined : nextPageToken,
+    regionCode: "KR",
+    type: "video",
   });
 
   return res;
@@ -38,7 +54,7 @@ const VideoListView = () => {
     error,
   } = useInfiniteQuery(
     "videoList",
-    ({ pageParam = undefined }) => fetchVideoList(pageParam),
+    ({ pageParam = undefined }) => fetchPopularVideoList(pageParam),
     {
       getNextPageParam: (lastPage) => lastPage.nextPageToken || undefined,
     }
@@ -57,6 +73,7 @@ const VideoListView = () => {
 
   if (isLoading) return <FullPageLoadingView />;
   if (isError) return <>{error}</>;
+  if (!data.pages.length) return <>None Data</>;
   return (
     <>
       <Pub.Container>
