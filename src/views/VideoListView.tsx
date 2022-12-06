@@ -22,13 +22,10 @@ const fetchPopularVideoList = async (nextPageToken?: string) => {
   return res;
 };
 
-const fetchSearchVideoList = async ({
-  nextPageToken,
-  keyword,
-}: {
-  nextPageToken?: string;
-  keyword: string;
-}) => {
+const fetchSearchVideoList = async (
+  keyword: string,
+  nextPageToken?: string
+) => {
   const res = await api.fetchSearchVideoList({
     part: "snippet",
     maxResults: 24,
@@ -68,14 +65,13 @@ const VideoListView = () => {
       ["videoList", searchParams.get("keyword")],
       ({ pageParam = undefined }) =>
         searchParams.get("keyword")
-          ? fetchSearchVideoList({
-              nextPageToken: pageParam,
-              keyword: searchParams.get("keyword"),
-            })
+          ? fetchSearchVideoList(searchParams.get("keyword"), pageParam)
           : fetchPopularVideoList(pageParam),
       {
         getNextPageParam: (lastPage) => lastPage.nextPageToken || undefined,
         onSuccess: (data) => {
+          setIsExceeding(false);
+
           if (!data.pages[0].items.length) {
             setIsNoneData(true);
           } else {
@@ -128,10 +124,11 @@ const VideoListView = () => {
   useIntersectionObserver({ callback: handleObserver, ref: targetRef });
 
   if (isLoading) return <FullPageLoadingView />;
-  if (isExceeding) return <div>Exceeding Error</div>;
+  if (isExceeding)
+    return <Pub.Container isFlex={isExceeding}>Exceeding Error</Pub.Container>;
   return (
     <>
-      <Pub.Container isNoneData={isNoneData}>
+      <Pub.Container isFlex={isNoneData}>
         {videoList.map((pageData) => {
           if (!!pageData.items.length) {
             return pageData.items.map((video: any, index: number) => (
@@ -157,7 +154,7 @@ const VideoListView = () => {
 export default VideoListView;
 
 interface ContentsViewStylePropsType {
-  isNoneData: boolean;
+  isFlex: boolean;
 }
 
 const Pub = {
@@ -165,8 +162,8 @@ const Pub = {
     margin-top: 36px;
     text-align: center;
 
-    ${({ isNoneData }) => {
-      if (isNoneData) {
+    ${({ isFlex }) => {
+      if (isFlex) {
         return css`
           display: flex;
           justify-content: center;
