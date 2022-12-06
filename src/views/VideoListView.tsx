@@ -1,7 +1,8 @@
+import axios from "axios";
 import { isNil } from "lodash";
-import { useRef } from "react";
-import { useInfiniteQuery } from "react-query";
-import { useSearchParams } from "react-router-dom";
+import { useRef, useState } from "react";
+import { InfiniteData, useInfiniteQuery } from "react-query";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import FullPageLoadingView from "../components/FullPageLoadingView";
 import SpinnerView from "../components/SpinnerView";
@@ -38,27 +39,61 @@ const fetchSearchVideoList = async (
 };
 
 const VideoListView = () => {
+  // navigate
+  const navigate = useNavigate();
+
   // searchParams
   const searchParams = useSearchParams()[0];
 
   // useRef
   const targetRef = useRef<HTMLDivElement>(null);
 
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isLoading,
-    isFetching,
-    isError,
-    error,
-  } = useInfiniteQuery(
-    "videoList",
-    ({ pageParam = undefined }) => fetchPopularVideoList(pageParam),
-    {
-      getNextPageParam: (lastPage) => lastPage.nextPageToken || undefined,
-    }
-  );
+  // useState
+  const [videoList, setVideoList] = useState<InfiniteData<any> | null>(null);
+  const [isExceeding, setIsExceeding] = useState<boolean>(false);
+
+  const { fetchNextPage, hasNextPage, isLoading, isFetching } =
+    useInfiniteQuery(
+      "videoList",
+      ({ pageParam = undefined }) => fetchPopularVideoList(pageParam),
+      {
+        getNextPageParam: (lastPage) => lastPage.nextPageToken || undefined,
+        onSuccess: (data) => {
+          console.log(data);
+          setVideoList(data);
+        },
+        onError(error: unknown) {
+          if (axios.isAxiosError(error)) {
+            switch (error.response?.status) {
+              case 403:
+                setIsExceeding(true);
+                break;
+
+              case 404:
+                navigate({
+                  pathname: "/error",
+                  search: "?code=404&message=Not Found",
+                });
+                break;
+
+              case 500:
+                navigate({
+                  pathname: "/error",
+                  search: "?code=500&message=Internal Server Error",
+                });
+                break;
+
+              default:
+                navigate({
+                  pathname: "/error",
+                  search:
+                    "?code=UNKNOWN&message=Sorry, an unknown error occurred.",
+                });
+            }
+          }
+        },
+      }
+    );
 
   const handleObserver = (entries: IntersectionObserverEntry[]) => {
     if (!hasNextPage) {
@@ -72,12 +107,12 @@ const VideoListView = () => {
   useIntersectionObserver({ callback: handleObserver, ref: targetRef });
 
   if (isLoading) return <FullPageLoadingView />;
-  if (isError) return <>{error}</>;
-  if (!data.pages.length) return <>None Data</>;
+  if (isExceeding) return <div>Exceeding Error</div>;
+  if (!videoList.pages.length) return <>None Data</>;
   return (
     <>
       <Pub.Container>
-        {data.pages.map((pageData) => {
+        {videoList.pages.map((pageData) => {
           return pageData.items.map((video: any, index: number) => {
             return (
               <VideoItemView

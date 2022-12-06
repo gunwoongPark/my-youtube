@@ -6,7 +6,7 @@ import { ThemeType } from "./types/type";
 import { QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import Routes from "./Routes";
-import { queryClient } from "./react-query/queryClient";
+import queryClient from "./react-query/queryClient";
 
 declare module "styled-components" {
   export interface DefaultTheme {
