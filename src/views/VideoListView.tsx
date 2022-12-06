@@ -1,9 +1,9 @@
 import axios from "axios";
 import { isNil } from "lodash";
-import { useRef, useState } from "react";
-import { InfiniteData, useInfiniteQuery } from "react-query";
+import { useEffect, useRef, useState } from "react";
+import { useInfiniteQuery } from "react-query";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import FullPageLoadingView from "../components/FullPageLoadingView";
 import SpinnerView from "../components/SpinnerView";
 import useIntersectionObserver from "../hooks/useIntersectionObserver";
@@ -22,10 +22,13 @@ const fetchPopularVideoList = async (nextPageToken?: string) => {
   return res;
 };
 
-const fetchSearchVideoList = async (
-  keyword: string,
-  nextPageToken?: string
-) => {
+const fetchSearchVideoList = async ({
+  nextPageToken,
+  keyword,
+}: {
+  nextPageToken?: string;
+  keyword: string;
+}) => {
   const res = await api.fetchSearchVideoList({
     part: "snippet",
     maxResults: 24,
@@ -49,18 +52,36 @@ const VideoListView = () => {
   const targetRef = useRef<HTMLDivElement>(null);
 
   // useState
-  const [videoList, setVideoList] = useState<InfiniteData<any> | null>(null);
+  const [videoList, setVideoList] = useState<any[]>([]);
   const [isExceeding, setIsExceeding] = useState<boolean>(false);
+  const [isNoneData, setIsNoneData] = useState<boolean>(false);
+
+  useEffect(() => {
+    const keyword = searchParams.get("keyword");
+    if (typeof keyword === "string" && keyword.length) {
+      setVideoList([]);
+    }
+  }, [searchParams]);
 
   const { fetchNextPage, hasNextPage, isLoading, isFetching } =
     useInfiniteQuery(
-      "videoList",
-      ({ pageParam = undefined }) => fetchPopularVideoList(pageParam),
+      ["videoList", searchParams.get("keyword")],
+      ({ pageParam = undefined }) =>
+        searchParams.get("keyword")
+          ? fetchSearchVideoList({
+              nextPageToken: pageParam,
+              keyword: searchParams.get("keyword"),
+            })
+          : fetchPopularVideoList(pageParam),
       {
         getNextPageParam: (lastPage) => lastPage.nextPageToken || undefined,
         onSuccess: (data) => {
-          console.log(data);
-          setVideoList(data);
+          if (!data.pages[0].items.length) {
+            setIsNoneData(true);
+          } else {
+            setIsNoneData(false);
+          }
+          setVideoList(data.pages);
         },
         onError(error: unknown) {
           if (axios.isAxiosError(error)) {
@@ -106,21 +127,21 @@ const VideoListView = () => {
   };
   useIntersectionObserver({ callback: handleObserver, ref: targetRef });
 
-  if (!isLoading) return <FullPageLoadingView />;
+  if (isLoading) return <FullPageLoadingView />;
   if (isExceeding) return <div>Exceeding Error</div>;
-  if (!videoList.pages.length) return <>None Data</>;
   return (
     <>
-      <Pub.Container>
-        {videoList.pages.map((pageData) => {
-          return pageData.items.map((video: any, index: number) => {
-            return (
+      <Pub.Container isNoneData={isNoneData}>
+        {videoList.map((pageData) => {
+          if (!!pageData.items.length) {
+            return pageData.items.map((video: any, index: number) => (
               <VideoItemView
                 key={`video-list-item-${index}-${video.id}`}
                 video={video}
               />
-            );
-          });
+            ));
+          }
+          return <div className="none-data">None Data</div>;
         })}
       </Pub.Container>
 
@@ -140,22 +161,33 @@ interface ContentsViewStylePropsType {
 }
 
 const Pub = {
-  Container: styled.div`
+  Container: styled.div<ContentsViewStylePropsType>`
     margin-top: 36px;
     text-align: center;
 
-    display: grid;
-    justify-items: center;
-    @media screen and (min-width: 1280px) {
-      grid-template-columns: 1fr 1fr 1fr 1fr;
-    }
+    ${({ isNoneData }) => {
+      if (isNoneData) {
+        return css`
+          display: flex;
+          justify-content: center;
+        `;
+      } else {
+        return css`
+          display: grid;
+          justify-items: center;
+          @media screen and (min-width: 1280px) {
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+          }
 
-    @media screen and (max-width: 1279px) and (min-width: 960px) {
-      grid-template-columns: 1fr 1fr 1fr;
-    }
+          @media screen and (max-width: 1279px) and (min-width: 960px) {
+            grid-template-columns: 1fr 1fr 1fr;
+          }
 
-    @media screen and (max-width: 959px) and (min-width: 640px) {
-      grid-template-columns: 1fr 1fr;
-    }
+          @media screen and (max-width: 959px) and (min-width: 640px) {
+            grid-template-columns: 1fr 1fr;
+          }
+        `;
+      }
+    }}
   `,
 };
