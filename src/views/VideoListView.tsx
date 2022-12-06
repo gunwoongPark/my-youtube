@@ -106,7 +106,7 @@ const VideoListView = () => {
   };
   useIntersectionObserver({ callback: handleObserver, ref: targetRef });
 
-  if (isLoading) return <FullPageLoadingView />;
+  if (!isLoading) return <FullPageLoadingView />;
   if (isExceeding) return <div>Exceeding Error</div>;
   if (!videoList.pages.length) return <>None Data</>;
   return (
