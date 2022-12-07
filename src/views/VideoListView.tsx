@@ -8,6 +8,7 @@ import FullPageLoadingView from "../components/FullPageLoadingView";
 import SpinnerView from "../components/SpinnerView";
 import useIntersectionObserver from "../hooks/useIntersectionObserver";
 import { api } from "../lib/api/api";
+import { queryKeys } from "../react-query/queryKey";
 import VideoItemView from "./VideoItemView";
 
 const fetchPopularVideoList = async (nextPageToken?: string) => {
@@ -63,8 +64,8 @@ const VideoListView = () => {
   const { fetchNextPage, hasNextPage, isLoading, isFetching } =
     useInfiniteQuery(
       searchParams.get("keyword")
-        ? ["videoList", searchParams.get("keyword")]
-        : "videoList",
+        ? [queryKeys.searchVideoList, searchParams.get("keyword")]
+        : queryKeys.popularVideoList,
       ({ pageParam = undefined }) =>
         searchParams.get("keyword")
           ? fetchSearchVideoList(searchParams.get("keyword"), pageParam)
