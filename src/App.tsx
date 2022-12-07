@@ -30,11 +30,11 @@ const App = () => {
   const context = useContext(themeContext);
 
   // useEffect
-  useEffect(() => {
-    const body = document.querySelector("body") as HTMLBodyElement;
+  // useEffect(() => {
+  //   const body = document.querySelector("body") as HTMLBodyElement;
 
-    body.style.transition = "background 0.2s ease-out, color 0.2s ease-out";
-  }, [context?.value]);
+  //   body.style.transition = "background 0.2s ease-out, color 0.2s ease-out";
+  // }, [context?.value]);
 
   return (
     <ThemeProvider theme={theme[context?.value as ThemeType]}>
