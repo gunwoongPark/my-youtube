@@ -62,7 +62,9 @@ const VideoListView = () => {
 
   const { fetchNextPage, hasNextPage, isLoading, isFetching } =
     useInfiniteQuery(
-      ["videoList", searchParams.get("keyword")],
+      searchParams.get("keyword")
+        ? ["videoList", searchParams.get("keyword")]
+        : "videoList",
       ({ pageParam = undefined }) =>
         searchParams.get("keyword")
           ? fetchSearchVideoList(searchParams.get("keyword"), pageParam)
