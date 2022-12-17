@@ -1,112 +1,27 @@
-import axios from "axios";
-import { isNil } from "lodash";
-import { useEffect, useRef, useState } from "react";
-import { useInfiniteQuery } from "react-query";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useRef } from "react";
+import { useSearchParams } from "react-router-dom";
 import styled, { css } from "styled-components";
 import FullPageLoadingView from "../components/FullPageLoadingView";
 import SpinnerView from "../components/SpinnerView";
 import useIntersectionObserver from "../hooks/useIntersectionObserver";
-import searchApi from "../lib/api/search";
-import videoApi from "../lib/api/video";
-
-import { queryKeys } from "../react-query/queryKey";
+import useVideoList from "../hooks/useVideoList";
 import VideoItemView from "./VideoItemView";
 
-const fetchPopularVideoList = async (nextPageToken?: string) => {
-  const res = await videoApi.fetchPopularVideoList({
-    part: "snippet",
-    chart: "mostPopular",
-    maxResults: 24,
-    pageToken: isNil(nextPageToken) ? undefined : nextPageToken,
-    regionCode: "KR",
-  });
-
-  return res;
-};
-
-const fetchSearchVideoList = async (
-  keyword: string,
-  nextPageToken?: string
-) => {
-  const res = await searchApi.fetchSearchVideoList({
-    part: "snippet",
-    maxResults: 24,
-    q: keyword,
-    pageToken: isNil(nextPageToken) ? undefined : nextPageToken,
-    regionCode: "KR",
-    type: "video",
-  });
-
-  return res;
-};
-
 const VideoListView = () => {
-  // navigate
-  const navigate = useNavigate();
-
   // searchParams
   const searchParams = useSearchParams()[0];
 
   // useRef
   const targetRef = useRef<HTMLDivElement>(null);
 
-  // useState
-  const [isExceeding, setIsExceeding] = useState<boolean>(false);
-
-  const { data, fetchNextPage, hasNextPage, isLoading, isFetching } =
-    useInfiniteQuery(
-      searchParams.get("keyword")
-        ? [queryKeys.searchVideoList, searchParams.get("keyword")]
-        : queryKeys.popularVideoList,
-      ({ pageParam = undefined }) =>
-        searchParams.get("keyword")
-          ? fetchSearchVideoList(searchParams.get("keyword"), pageParam)
-          : fetchPopularVideoList(pageParam),
-      {
-        getNextPageParam: (lastPage) => lastPage.nextPageToken || undefined,
-        // onSuccess: (data) => {
-        //   setIsExceeding(false);
-
-        //   if (!data.pages[0].items.length) {
-        //     setIsNoneData(true);
-        //   } else {
-        //     setIsNoneData(false);
-        //   }
-        //   setVideoList(data.pages);
-        // },
-        onError(error: unknown) {
-          if (axios.isAxiosError(error)) {
-            switch (error.response?.status) {
-              case 403:
-                setIsExceeding(true);
-                break;
-
-              case 404:
-                navigate({
-                  pathname: "/error",
-                  search: "?code=404&message=Not Found",
-                });
-                break;
-
-              case 500:
-                navigate({
-                  pathname: "/error",
-                  search: "?code=500&message=Internal Server Error",
-                });
-                break;
-
-              default:
-                navigate({
-                  pathname: "/error",
-                  search:
-                    "?code=UNKNOWN&message=Sorry, an unknown error occurred.",
-                });
-            }
-          }
-        },
-      }
-    );
+  const {
+    videoList,
+    fetchNextPage,
+    hasNextPage,
+    isLoading,
+    isFetching,
+    isExceeding,
+  } = useVideoList(searchParams.get("keyword"));
 
   const handleObserver = (entries: IntersectionObserverEntry[]) => {
     if (!hasNextPage) {
@@ -124,8 +39,8 @@ const VideoListView = () => {
     return <Pub.Container isFlex={isExceeding}>Exceeding Error</Pub.Container>;
   return (
     <>
-      <Pub.Container isFlex={!data.pages[0].items.length}>
-        {data.pages.map((pageData) => {
+      <Pub.Container isFlex={!videoList.pages[0].items.length}>
+        {videoList.pages.map((pageData) => {
           if (!!pageData.items.length) {
             return pageData.items.map((video: any, index: number) => (
               <VideoItemView
