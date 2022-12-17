@@ -52,18 +52,9 @@ const VideoListView = () => {
   const targetRef = useRef<HTMLDivElement>(null);
 
   // useState
-  const [videoList, setVideoList] = useState<any[]>([]);
   const [isExceeding, setIsExceeding] = useState<boolean>(false);
-  const [isNoneData, setIsNoneData] = useState<boolean>(false);
 
-  useEffect(() => {
-    const keyword = searchParams.get("keyword");
-    if (typeof keyword === "string" && keyword.length) {
-      setVideoList([]);
-    }
-  }, [searchParams]);
-
-  const { fetchNextPage, hasNextPage, isLoading, isFetching } =
+  const { data, fetchNextPage, hasNextPage, isLoading, isFetching } =
     useInfiniteQuery(
       searchParams.get("keyword")
         ? [queryKeys.searchVideoList, searchParams.get("keyword")]
@@ -74,16 +65,16 @@ const VideoListView = () => {
           : fetchPopularVideoList(pageParam),
       {
         getNextPageParam: (lastPage) => lastPage.nextPageToken || undefined,
-        onSuccess: (data) => {
-          setIsExceeding(false);
+        // onSuccess: (data) => {
+        //   setIsExceeding(false);
 
-          if (!data.pages[0].items.length) {
-            setIsNoneData(true);
-          } else {
-            setIsNoneData(false);
-          }
-          setVideoList(data.pages);
-        },
+        //   if (!data.pages[0].items.length) {
+        //     setIsNoneData(true);
+        //   } else {
+        //     setIsNoneData(false);
+        //   }
+        //   setVideoList(data.pages);
+        // },
         onError(error: unknown) {
           if (axios.isAxiosError(error)) {
             switch (error.response?.status) {
@@ -133,8 +124,8 @@ const VideoListView = () => {
     return <Pub.Container isFlex={isExceeding}>Exceeding Error</Pub.Container>;
   return (
     <>
-      <Pub.Container isFlex={isNoneData}>
-        {videoList.map((pageData) => {
+      <Pub.Container isFlex={!data.pages[0].items.length}>
+        {data.pages.map((pageData) => {
           if (!!pageData.items.length) {
             return pageData.items.map((video: any, index: number) => (
               <VideoItemView
