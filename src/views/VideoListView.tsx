@@ -7,12 +7,14 @@ import styled, { css } from "styled-components";
 import FullPageLoadingView from "../components/FullPageLoadingView";
 import SpinnerView from "../components/SpinnerView";
 import useIntersectionObserver from "../hooks/useIntersectionObserver";
-import { api } from "../lib/api/api";
+import searchApi from "../lib/api/search";
+import videoApi from "../lib/api/video";
+
 import { queryKeys } from "../react-query/queryKey";
 import VideoItemView from "./VideoItemView";
 
 const fetchPopularVideoList = async (nextPageToken?: string) => {
-  const res = await api.fetchPopularVideoList({
+  const res = await videoApi.fetchPopularVideoList({
     part: "snippet",
     chart: "mostPopular",
     maxResults: 24,
@@ -27,7 +29,7 @@ const fetchSearchVideoList = async (
   keyword: string,
   nextPageToken?: string
 ) => {
-  const res = await api.fetchSearchVideoList({
+  const res = await searchApi.fetchSearchVideoList({
     part: "snippet",
     maxResults: 24,
     q: keyword,
