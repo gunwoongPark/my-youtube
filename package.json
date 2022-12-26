@@ -55,5 +55,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "REACT_APP_YOUTUBE_API_BASE_URL"
+  "proxy": "dotenv -e .env -p REACT_APP_YOUTUBE_API_BASE_URL"
 }
