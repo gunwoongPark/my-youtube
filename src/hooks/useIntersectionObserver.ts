@@ -17,7 +17,7 @@ const useIntersectionObserver = ({
     }
 
     return () => observer && observer.disconnect();
-  }, [callback]);
+  }, [callback, ref]);
 };
 
 export default useIntersectionObserver;

@@ -1,6 +1,6 @@
 import { createGlobalStyle, ThemeProvider } from "styled-components";
 import theme from "./theme/theme";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { themeContext } from "./context/ThemeProvider";
 import { ThemeType } from "./types/type";
 import { QueryClientProvider } from "react-query";
