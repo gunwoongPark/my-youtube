@@ -3,6 +3,7 @@ import InputView from "../components/InputView";
 import YoutubeLogo from "../assets/youtube-icon-1.svg";
 import { useContext } from "react";
 import { themeContext } from "../context/ThemeProvider";
+import { BsFillSunFill, BsFillMoonFill } from "react-icons/bs";
 
 const HeaderView = () => {
   const context = useContext(themeContext);
@@ -17,7 +18,15 @@ const HeaderView = () => {
 
         <span>
           <label htmlFor="is-dark-mode-button">
-            {context?.value === "DARK" ? "SET LIGHT MODE" : "SET DARK MODE"}
+            {context.value === "DARK" ? (
+              <i>
+                <BsFillSunFill />
+              </i>
+            ) : (
+              <i>
+                <BsFillMoonFill />
+              </i>
+            )}
           </label>
           <input
             type="checkbox"
@@ -57,6 +66,18 @@ const Pub = {
     & span {
       position: absolute;
       right: 25px;
+
+      label {
+        cursor: pointer;
+
+        i {
+          font-size: 24px;
+        }
+      }
+
+      input {
+        display: none;
+      }
     }
   `,
 };
