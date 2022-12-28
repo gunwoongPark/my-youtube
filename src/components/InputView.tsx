@@ -14,15 +14,10 @@ const InputView = () => {
   // useEffect
   useEffect(() => {
     const keyword = searchParams.get("keyword");
-    console.log(keyword);
     if (typeof keyword === "string") {
       setSearchInput(keyword);
     }
   }, [searchParams]);
-
-  useEffect(() => {
-    console.log(searchInput);
-  }, [searchInput]);
 
   // function
   const debounceOnChange = debounce((e) => {
