@@ -8,11 +8,9 @@ export const getTheme = () => {
   ) as ThemeType | null;
 
   if (isNil(localStorageTheme)) {
-    const osTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
-      ? "DARK"
-      : "LIGHT";
+    const osTheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
 
-    if (osTheme === "DARK") {
+    if (osTheme) {
       return darkTheme;
     } else {
       return lightTheme;
