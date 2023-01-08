@@ -1,24 +1,27 @@
 import React, { ChangeEvent, createContext, useState } from "react";
-import { ThemeType } from "../types/type";
-import setInitialTheme from "../util/theme";
+import { DefaultTheme } from "styled-components";
+import { darkTheme, lightTheme } from "../theme/theme";
+import { getTheme } from "../util/getTheme";
 
 type ThemeContextValueType = {
-  value: ThemeType;
+  value: DefaultTheme;
   action: (e: ChangeEvent<HTMLInputElement>) => void;
 } | null;
 
+// create context
 export const themeContext = createContext<ThemeContextValueType>(null);
 
 const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
-  const [theme, setTheme] = useState<ThemeType>(setInitialTheme());
+  const [theme, setTheme] = useState<DefaultTheme>(getTheme());
 
+  // toggle theme
   const toggleTheme = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.checked) {
       localStorage.setItem("theme", "DARK");
-      setTheme("DARK");
+      setTheme(darkTheme);
     } else {
       localStorage.setItem("theme", "LIGHT");
-      setTheme("LIGHT");
+      setTheme(lightTheme);
     }
   };
 

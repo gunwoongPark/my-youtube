@@ -1,19 +1,12 @@
-import { useContext } from "react";
 import { FadeLoader } from "react-spinners";
-import styled from "styled-components";
-import { themeContext } from "../context/ThemeProvider";
-import theme from "../theme/theme";
-import { ThemeType } from "../types/type";
+import styled, { useTheme } from "styled-components";
 
 const FullPageLoadingView = () => {
-  const context = useContext(themeContext);
+  const themeValue = useTheme();
 
   return (
     <Pub.Container>
-      <FadeLoader
-        className="loader"
-        color={theme[context?.value as ThemeType].color}
-      />
+      <FadeLoader className="loader" color={themeValue.color} />
     </Pub.Container>
   );
 };

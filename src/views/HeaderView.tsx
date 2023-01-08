@@ -6,7 +6,7 @@ import { themeContext } from "../context/ThemeProvider";
 import { BsFillSunFill, BsFillMoonFill } from "react-icons/bs";
 
 const HeaderView = () => {
-  const context = useContext(themeContext);
+  const { value: theme, action: toggleTheme } = useContext(themeContext);
 
   return (
     <Pub.Container>
@@ -18,7 +18,7 @@ const HeaderView = () => {
 
         <span>
           <label htmlFor="is-dark-mode-button">
-            {context.value === "DARK" ? (
+            {theme.theme === "DARK" ? (
               <i>
                 <BsFillSunFill />
               </i>
@@ -31,8 +31,8 @@ const HeaderView = () => {
           <input
             type="checkbox"
             id="is-dark-mode-button"
-            checked={context?.value === "DARK"}
-            onChange={(e) => context?.action(e)}
+            checked={theme.theme === "DARK"}
+            onChange={toggleTheme}
           />
         </span>
       </div>
