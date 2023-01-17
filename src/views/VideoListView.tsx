@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import styled, { css } from "styled-components";
 import FullPageLoadingView from "../components/FullPageLoadingView";
@@ -23,15 +23,22 @@ const VideoListView = () => {
     isExceeding,
   } = useVideoList(searchParams.get("keyword"));
 
-  const handleObserver = (entries: IntersectionObserverEntry[]) => {
-    if (!hasNextPage) {
-      return;
-    }
+  useEffect(() => {
+    console.log(videoList);
+  }, [videoList]);
 
-    if (entries[0].isIntersecting) {
-      fetchNextPage();
-    }
-  };
+  const handleObserver = useCallback(
+    (entries: IntersectionObserverEntry[]) => {
+      if (!hasNextPage) {
+        return;
+      }
+
+      if (entries[0].isIntersecting) {
+        fetchNextPage();
+      }
+    },
+    [fetchNextPage, hasNextPage]
+  );
   useIntersectionObserver({ callback: handleObserver, ref: targetRef });
 
   if (isLoading) return <FullPageLoadingView />;
@@ -42,9 +49,9 @@ const VideoListView = () => {
       <Pub.Container isFlex={!videoList.pages[0].items.length}>
         {videoList.pages.map((pageData) => {
           if (!!pageData.items.length) {
-            return pageData.items.map((video: any, index: number) => (
+            return pageData.items.map((video: any) => (
               <VideoItemView
-                key={`video-list-item-${index}-${video.id}`}
+                key={`video-list-item-${video.id.videoId}`}
                 video={video}
               />
             ));
